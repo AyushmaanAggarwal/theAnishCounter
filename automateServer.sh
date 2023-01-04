@@ -7,7 +7,7 @@
 cd /home/ayu/theAnishCounter
 
 # Pull existing changes
-git checkout main
+git checkout live
 git pull 
 
 # Start virtual enviroment
