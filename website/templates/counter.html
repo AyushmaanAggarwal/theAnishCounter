@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Counter{% endblock %}
+
+{% block content %}
+<h1 align="center">Counters</h1>
+<ul>
+    {% for counter in counters %}
+    <li>
+        {{ counter.counterName }} | {{counter.description}} | {{counter.counts}}
+        <button type="button" class="close" onClick="increaseCounter('{{ counter.id }}')">
+            <span aria-hidden="true">&#43;</span>
+        </button>
+    </li>
+    {% endfor %}
+</ul>
+<a href="/new-counter">
+    <button>Make New Counter</button>
+</a>
+{% endblock %}

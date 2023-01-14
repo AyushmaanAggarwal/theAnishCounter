@@ -10,3 +10,6 @@ class User(db.Model, UserMixin):
 
 class Counter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    counterName = db.Column(db.String(150))
+    description = db.Column(db.String(1000))
+    counts = db.Column(db.Integer)
