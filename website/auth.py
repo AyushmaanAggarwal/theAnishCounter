@@ -42,6 +42,12 @@ def sign_up():
         user = User.query.filter_by(email=email).first()
         if user:
             flash('Email already exists.', category='error')
+        elif len(full_name) == 0:
+            flash('Please enter a name.', category='error')
+        elif len(username) == 0:
+            flash('Please enter a username.', category='error')
+        elif len(password1) == 0:
+            flash('Please enter a password.', category='error')
         elif (password1 != password2):
             flash('Passwords don\'t match.', category='error')
         else:
