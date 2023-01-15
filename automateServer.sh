@@ -31,7 +31,7 @@ echo && echo
 # Run flask server 
 # (python file is run.py and app is the app variable)
 # echo "Running flask server"
-# ./venv/bin/gunicorn -w 9 run:app
+# ./venv/bin/gunicorn -w 9 main:app
 
 # instead of running above command, the server will be 
 # using supervisor: # sudo supervisorctl reload
