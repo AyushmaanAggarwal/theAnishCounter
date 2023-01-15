@@ -7,6 +7,9 @@
     {% for counter in counters %}
     <li>
         {{ counter.counterName }} | {{counter.description}} | {{counter.counts}}
+        <button type="button" class="close" onClick="deleteCounter('{{ counter.id }}')">
+            <span aria-hidden="true">&times;</span>
+        </button>
         <button type="button" class="close" onClick="increaseCounter('{{ counter.id }}')">
             <span aria-hidden="true">&#43;</span>
         </button>

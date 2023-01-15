@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Movies{% endblock %}
+
+{% block content %}
+<h1 align="center">Movie Night List</h1>
+<ul>
+    {% for movie in movies %}
+    <li>
+        {{ movie.movieName }} | {{movie.releaseYear}} | {{ movie.runtime }}
+        {{ movie.description }}
+        {% if user in movie.likedUsers %}
+        <button type="button" class="close" onClick="unlikeMovie('{{ movie.id }}')">
+            <span aria-hidden="true">{{ movie.likes }} <FONT COLOR = "#ff0000">&hearts;</FONT></span>
+        </button>
+        {% else %}
+        <button type="button" class="close" onClick="likeMovie('{{ movie.id }}')">
+            <span aria-hidden="true">{{ movie.likes }} &hearts;</span>
+        </button>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+<a href="/add-movie">
+    <button>Add Movie</button>
+</a>
+{% endblock %}
