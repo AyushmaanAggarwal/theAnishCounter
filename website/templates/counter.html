@@ -10,8 +10,11 @@
         <button type="button" class="close" onClick="deleteCounter('{{ counter.id }}')">
             <span aria-hidden="true">&times;</span>
         </button>
-        <button type="button" class="close" onClick="increaseCounter('{{ counter.id }}')">
+        <button type="button" class="close" onClick="increaseCounter('{{ counter.id }}', true)">
             <span aria-hidden="true">&#43;</span>
+        </button>
+        <button type="button" class="close" onClick="increaseCounter('{{ counter.id }}', false)">
+            <span aria-hidden="true">-</span>
         </button>
     </li>
     {% endfor %}

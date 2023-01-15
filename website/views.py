@@ -43,9 +43,13 @@ def new_counter():
 def increase_counter():
     counter = json.loads(request.data)
     counterId = counter['counterId']
+    increase = counter['increase']
     counter = Counter.query.get(counterId)
     if counter:
-        counter.counts = counter.counts + 1
+        if increase:
+            counter.counts = counter.counts + 1
+        else:
+            counter.counts = counter.counts - 1
         db.session.commit()
         return jsonify({})
 
@@ -92,20 +96,14 @@ def add_movie():
 def like_movie():
     movie = json.loads(request.data)
     movieId = movie['movieId']
+    increase = movie['increase']
     movie = Movie.query.get(movieId)
     if movie:
-        movie.likes = movie.likes + 1
-        movie.likedUsers.append(current_user)
-        db.session.commit()
-        return jsonify({})
-
-@views.route('/unlike-movie', methods=['POST'])
-def unlike_movie():
-    movie = json.loads(request.data)
-    movieId = movie['movieId']
-    movie = Movie.query.get(movieId)
-    if movie:
-        movie.likes = movie.likes - 1
-        movie.likedUsers.remove(current_user)
+        if increase:
+            movie.likes = movie.likes + 1
+            movie.likedUsers.append(current_user)
+        else:
+            movie.likes = movie.likes - 1
+            movie.likedUsers.remove(current_user)  
         db.session.commit()
         return jsonify({})
