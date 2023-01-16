@@ -3,26 +3,22 @@ from flask_login import login_required, current_user
 from .models import Counter, Movie
 from . import db
 import json
-from website.auth import verification_required
 
 views = Blueprint('views', __name__)
 
 @views.route('/')
 @login_required
-@verification_required(current_user)
 def home():
     return render_template("home.html", user=current_user)
 
 @views.route('/counter')
 @login_required
-@verification_required(current_user)
 def counter():
     counters = Counter.query.all()
     return render_template("counter.html", user=current_user, counters=counters)
 
 @views.route('/new-counter', methods=['POST', 'GET'])
 @login_required
-@verification_required(current_user)
 def new_counter():
     if request.method == 'POST':
         counterName = request.form.get('counterName')
@@ -69,14 +65,12 @@ def delete_counter():
 
 @views.route('/movies')
 @login_required
-@verification_required(current_user)
 def movies():
     movies = Movie.query.all()
     return render_template("movies.html", user=current_user, movies=movies)
 
 @views.route('/add-movie', methods=['POST', 'GET'])
 @login_required
-@verification_required(current_user)
 def add_movie():
     if request.method == 'POST':
         movieName = request.form.get('movieName')
