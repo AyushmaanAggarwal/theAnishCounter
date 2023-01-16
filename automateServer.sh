@@ -24,7 +24,7 @@ echo && echo
 
 # Install missing packages
 echo "Installing missing python packages"
-pip install -r requirements.txt
+./venv/bin/python3 -m pip install -r requirements.txt
 
 echo && echo 
 

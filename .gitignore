@@ -2,3 +2,5 @@ venv/
 .fleet/
 website/__pycache__
 instance/
+email/*.json
+email/__pycache__/
