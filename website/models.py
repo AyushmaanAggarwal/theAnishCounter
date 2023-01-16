@@ -20,14 +20,21 @@ class Counter(db.Model):
     counts = db.Column(db.Integer)
 
 movies_likes = db.Table('movie_likes',
-                        db.Column('movie_id', db.Integer(), db.ForeignKey('movie.id')),
-                        db.Column('user_id', db.Integer(), db.ForeignKey('user.id')))
+                        db.Column('movie_id', db.Integer, db.ForeignKey('movie.id')),
+                        db.Column('user_id', db.Integer, db.ForeignKey('user.id')))
 
 class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     movieName = db.Column(db.String(150))
-    releaseYear = db.Column(db.Integer())
+    releaseYear = db.Column(db.Integer)
     description = db.Column(db.String(1000))
     runtime = db.Column(db.String(150))
-    likes = db.Column(db.Integer())
+    likes = db.Column(db.Integer)
     likedUsers = db.relationship('User', secondary=movies_likes, backref='movies')
+
+class Lateness(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    userId = db.Column(db.Integer, db.ForeignKey('user.id'))
+    lateTotal = db.Column(db.Integer)
+    arrived = db.Column(db.Boolean)
+    lastTime = db.Column(db.DateTime)

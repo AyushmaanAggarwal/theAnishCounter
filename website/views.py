@@ -66,7 +66,7 @@ def delete_counter():
 @views.route('/movies')
 @login_required
 def movies():
-    movies = Movie.query.all()
+    movies = Movie.query.order_by(Movie.likes.desc()).all()
     return render_template("movies.html", user=current_user, movies=movies)
 
 @views.route('/add-movie', methods=['POST', 'GET'])
