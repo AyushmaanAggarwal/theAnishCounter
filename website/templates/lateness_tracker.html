@@ -12,7 +12,7 @@
 
 <ol>
     {% for user in all_users %}
-    <li> {{ user.fullName }}  {{ user.minutes_late }} </li>
+    <li> {{ user.fullName }}  {{ user.lateness_counter.lateTotal }} </li>
     {% endfor %}
 </ol>
 
