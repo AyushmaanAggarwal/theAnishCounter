@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<form method='POST'>
+  <h3 align='center'>Verify Email</h3>
+  <p align="left">Check your email for verification code</p>
+  <div class="form-group">
+    <label for="emailCode">Email Verification Code</label>
+    <input
+      type="text"
+      class="form-control"
+      id="emailCode"
+      name="emailCode"
+      placeholder="Enter Email Verification Code"
+    />
+  </div>
+  <br />
+  <button type="submit" class="btn btn-primary">Submit</button>
+  <a href="/resend-verification-code">Resend Verification Code</a>
+</form>
+{% endblock %}
