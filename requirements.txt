@@ -7,3 +7,6 @@ gunicorn>=20.1.0
 google-auth-oauthlib>=0.4.1
 db>=0.1.1
 SQLAlchemy>=1.4.41
+Flask-Admin>=1.6.0
+google-api-python-client
+google-auth-httplib2

@@ -13,6 +13,7 @@ class User(db.Model, UserMixin):
     resetpasswordexp = db.Column(db.Integer()) # Used for checking expiration date for password reset
     password = db.Column(db.String(150))
     lateness_counter = db.relationship("Lateness", back_populates="user")
+    testlevel = db.Column(db.String(10))
 
 class Counter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
