@@ -21,6 +21,8 @@ def login():
             if check_password_hash(user.password, password):
                 flash("Logged in successfully!", category='success')
                 login_user(user, remember=True)
+                if user.emailauth != 0:
+                    return redirect(url_for('auth.verify_email'))
                 return redirect(url_for('views.home'))
             else:
                 flash("Incorrect password, try again.", category='error')
@@ -58,14 +60,12 @@ def sign_up():
             flash('Passwords don\'t match.', category='error')
         else:
             new_user = User(fullName=full_name, username=username, email=email, emailauth=email_auth, emailauthexp=email_auth_exp,
-                            password=generate_password_hash(password1, method='sha256'))
+                            emailauthattempts=0, password=generate_password_hash(password1, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
             send_verification_email(email, username, email_auth)
-
-            login_user(new_user, remember=True)
+            login_user(user, remember=True)
             flash('Account created!', category='success')
-
             return redirect(url_for('auth.verify_email'))
     return render_template("sign_up.html", user=current_user)
 
@@ -75,13 +75,14 @@ def verify_email():
         email_auth = request.form.get('emailCode').__str__()
 
         user = User.query.filter_by(email=current_user.email).first()
-        #123456 is a temporary bypass while debugging(will disable for final version
-        if (email_auth != user.emailauth and email_auth != 123456):
-            print((user.emailauth))
-            print((email_auth))
+        #123456 is a temporary bypass while debugging(will disable for final version)
+        if (current_user.emailauthattempts >= 10): \
+            flash('Your account has been deactivated. Please contact an admin to reset your account.', category='error')
+        elif (email_auth != user.emailauth and email_auth != 123456):
+            current_user.emailauthattempts += 1
             flash('Incorrect Verification Code.', category='error')
         elif (float(user.emailauthexp) < time.time() and email_auth != 123456):
-            flash('Expired Verification Code')
+            flash('Expired Verification Code.', category='error')
         else:
             user.emailauth = 0
             db.session.commit()
@@ -95,6 +96,15 @@ def resend_verification_code():
     new_email_auth_exp = time.time() + 24*3600
     current_user.emailauth = new_email_auth
     current_user.emailauthexp = new_email_auth_exp
+    current_user.emailauthattempts = 0
     db.session.commit()
     send_verification_email(current_user.email, current_user.username, current_user.emailauth)
+    flash('Reset verification code.', category='success')
     return redirect(url_for('auth.verify_email'))
+
+def verification_required(user):
+    def verify_helper(func):
+        if user and user.emailauth == 0:
+            return redirect(url_for('auth.verify_email'))
+        func()
+    return verify_helper
