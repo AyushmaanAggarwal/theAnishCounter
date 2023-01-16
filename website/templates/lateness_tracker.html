@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Lateness Tracker{% endblock %}
+
+{% block content %}
+<h1> DISPLAY TIME </h1>
+
+{% for user in all_users %}
+<form method="POST">
+    <button type="submit" > {{ user.fullName }} </button>
+</form>
+{% endfor %}
+
+<ol>
+    {% for user in all_users %}
+    <li> {{ user.fullName }}  {{ user.minutes_late }} </li>
+    {% endfor %}
+</ol>
+
+
+{% endblock %}
