@@ -18,7 +18,7 @@ def login():
 
         user = User.query.filter_by(email=email).first()
         if user:
-            if not check_password_hash(user.emailauth, 0):
+            if user.emailauth != str(0):
                 flash("Need to verify email!", category='success')
                 return redirect(url_for('auth.verify_email'))
             elif check_password_hash(user.password, password):
@@ -74,7 +74,7 @@ def sign_up():
 @auth.route('/verify-email', methods=['GET', 'POST'])
 def verify_email():
     if request.method == 'POST':
-        email_address = request.form.get("email_address")
+        email_address = request.form.get("email")
         password = request.form.get('password')
         token = request.form.get('verifyCode')
         user = User.query.filter_by(email=email_address).first()
@@ -89,7 +89,7 @@ def verify_email():
 @auth.route("/verify-email-link/<token>", methods=['GET', 'POST'])
 def verify_email_link(token):
     if request.method == 'POST':
-        email_address = request.form.get("email_address")
+        email_address = request.form.get("email")
         password = request.form.get('password')
         user = User.query.filter_by(email=email_address).first()
         if check_verification(user, password, token):
@@ -108,7 +108,7 @@ def resend_verification_code():
         if not user:
             flash('Email not registered.', category='error')
         else:
-            new_auth = round(random.uniform(100000, 999999)).__str__()
+            new_auth = str(round(random.uniform(100000, 999999)))
             if request.form.get("passwordReset"):
                 user.resetpassword = generate_password_hash(new_auth, method='sha256')
                 user.resetpasswordexp = time.time() + 24*3600
@@ -117,6 +117,9 @@ def resend_verification_code():
                 db.session.commit()
                 flash('Reset password.', category='success')
                 return redirect(url_for('auth.reset_password'))
+            if user.emailauth == 0:
+                flash('Already verified email.', category='success')
+                return redirect(url_for('views.home'))
 
             user.emailauth = generate_password_hash(new_auth, method='sha256')
             user.emailauthexp = time.time() + 24*3600
@@ -130,13 +133,13 @@ def resend_verification_code():
 @auth.route('/reset-password', methods=['GET', 'POST'])
 def reset_password():
     if request.method == 'POST':
-        email_address = request.form.get("email_address")
+        email_address = request.form.get("email")
         password = request.form.get('password')
         password2 = request.form.get('password2')
         token = request.form.get('verifyCode')
         user = User.query.filter_by(email=email_address).first()
         if check_reset_password(user, password, password2, token):
-            user.password = password
+            user.password = generate_password_hash(password, 'sha256')
             db.session.commit()
             flash('Password reset!', category='success')
             login_user(user, remember=True)
@@ -146,13 +149,13 @@ def reset_password():
 @auth.route('/reset-password-link/<token>', methods=['GET', 'POST'])
 def reset_password_link(token):
     if request.method == 'POST':
-        email_address = request.form.get("email_address")
+        email_address = request.form.get("email")
         password = request.form.get('password')
         password2 = request.form.get('password2')
 
         user = User.query.filter_by(email=email_address).first()
         if check_reset_password(user, password, password2, token):
-            user.password = password
+            user.password = generate_password_hash(password, 'sha256')
             db.session.commit()
             flash('Password reset!', category='success')
             login_user(user, remember=True)
@@ -173,9 +176,10 @@ def check_verification(user, password, token):
     return False
 
 def check_reset_password(user, password, password2, token):
-    if not user or not check_password_hash(user.password, password):
+    print(user)
+    if user is None:
         flash('Your Email or Password is incorrect', category='error')
-    if password != password2:
+    elif password != password2:
         flash("Passwords don't match", category='error')
     elif (user.emailauthattempts >= 10):
         flash('Your account has been deactivated. Please contact an admin to reset your account.', category='error')
