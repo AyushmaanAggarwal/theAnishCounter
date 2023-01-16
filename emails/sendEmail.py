@@ -19,7 +19,7 @@ def gmail_send_message(to_address, from_address, subject, message_text):
     TODO(developer) - See https://developers.google.com/identity
     for guides on implementing OAuth2 for the application.
     """
-    creds = Credentials.from_authorized_user_file('email/token.json', ['https://mail.google.com/'])
+    creds = Credentials.from_authorized_user_file('emails/token.json', ['https://mail.google.com/'])
 
     try:
         service = build('gmail', 'v1', credentials=creds)

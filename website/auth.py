@@ -1,19 +1,38 @@
+import time
+
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db
 from flask_login import login_user, login_required, logout_user, current_user
 import random
+from emails.sendVerification import send_verification_email
 
 auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template("login.html")
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+
+        user = User.query.filter_by(email=email).first()
+        if user:
+            if check_password_hash(user.password, password):
+                flash("Logged in successfully!", category='success')
+                login_user(user, remember=True)
+                return redirect(url_for('views.home'))
+            else:
+                flash("Incorrect password, try again.", category='error')
+        else:
+            flash("Email doesn't exist.", category='error')
+    return render_template("login.html", user=current_user)
 
 @auth.route('/logout')
+@login_required
 def logout():
-    return "<p>Logout</p>"
+    logout_user()
+    return redirect(url_for('auth.login'))
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
@@ -21,41 +40,61 @@ def sign_up():
         full_name = request.form.get('fullName')
         username = request.form.get('username')
         email = request.form.get('email')
-        email_auth = random.uniform(100000, 999999)
+        email_auth = round(random.uniform(100000, 999999)).__str__()
+        email_auth_exp = time.time()+ 24*3600
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
 
         user = User.query.filter_by(email=email).first()
         if user:
             flash('Email already exists.', category='error')
+        elif len(full_name) == 0:
+            flash('Please enter a name.', category='error')
+        elif len(username) == 0:
+            flash('Please enter a username.', category='error')
+        elif len(password1) == 0:
+            flash('Please enter a password.', category='error')
         elif (password1 != password2):
             flash('Passwords don\'t match.', category='error')
         else:
-            new_user = User(fullName=full_name, username = username, email=email, emailauth=email_auth,
-            password=generate_password_hash(password1, method='sha256'))
+            new_user = User(fullName=full_name, username=username, email=email, emailauth=email_auth, emailauthexp=email_auth_exp,
+                            password=generate_password_hash(password1, method='sha256'))
             db.session.add(new_user)
             db.session.commit()
+            send_verification_email(email, username, email_auth)
+
             login_user(new_user, remember=True)
             flash('Account created!', category='success')
-            #TODO: Redirect to email verificication (automate sending email to user with code and prompt user for code before activation)
-            #Make
+
             return redirect(url_for('auth.verify_email'))
-    return render_template("sign_up.html", )
+    return render_template("sign_up.html", user=current_user)
 
 @auth.route('/verify-email', methods=['GET', 'POST'])
 def verify_email():
     if request.method == 'POST':
-        email_auth = request.form.get('emailcode')
+        email_auth = request.form.get('emailCode').__str__()
 
         user = User.query.filter_by(email=current_user.email).first()
         #123456 is a temporary bypass while debugging(will disable for final version
-        if (user.emailauth != email_auth or email_auth == 123456):
+        if (email_auth != user.emailauth and email_auth != 123456):
+            print((user.emailauth))
+            print((email_auth))
             flash('Incorrect Verification Code.', category='error')
+        elif (float(user.emailauthexp) < time.time() and email_auth != 123456):
+            flash('Expired Verification Code')
         else:
-            setattr(user, emailauth, 0)
+            user.emailauth = 0
             db.session.commit()
             flash('Account verified!', category='success')
-            #TODO: Redirect to email verificication (automate sending email to user with code and prompt user for code before activation)
-            #Make
             return redirect(url_for('views.home'))
-    return render_template("verify_email.html", )
+    return render_template("verify_email.html", user=current_user)
+
+@auth.route('/resend-verification-code')
+def resend_verification_code():
+    new_email_auth = round(random.uniform(100000, 999999)).__str__()
+    new_email_auth_exp = time.time() + 24*3600
+    current_user.emailauth = new_email_auth
+    current_user.emailauthexp = new_email_auth_exp
+    db.session.commit()
+    send_verification_email(current_user.email, current_user.username, current_user.emailauth)
+    return redirect(url_for('auth.verify_email'))
