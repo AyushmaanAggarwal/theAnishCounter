@@ -8,7 +8,7 @@
     </div>
 </div>
 
-{% if (curr_time.date() in dates and curr_time.hour == 20) %}
+{% if (curr_time.date() in dates and curr_time.hour == 8) %}
 <div class='row text-center justify-content-center'>
     {% for user in tracking %}
     <div class='col-5 lateness-box p-2 m-2'>
@@ -47,7 +47,7 @@
       </tr>
     </thead>
     <tbody>
-        {% for user in ordered_tracking|reverse %}
+        {% for user in ordered_tracking %}
         <tr>
             <th scope="row">{{ loop.index }}</th>
             <td>{{ user.name }}</td>
