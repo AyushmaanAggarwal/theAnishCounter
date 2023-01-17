@@ -1,4 +1,4 @@
-import time
+import time, re
 
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from .models import User
@@ -50,7 +50,9 @@ def sign_up():
         password2 = request.form.get('password2')
 
         user = User.query.filter_by(email=email).first()
-        if user:
+        if not re.fullmatch(r"^\w+@berkeley\.edu$", email):
+            flash('Not a berkeley email', category="error")
+        elif user:
             flash('Email already exists.', category='error')
         elif len(full_name) == 0:
             flash('Please enter a name.', category='error')
