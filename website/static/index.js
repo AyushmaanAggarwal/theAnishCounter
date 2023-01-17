@@ -24,3 +24,21 @@ function likeMovie(movieId, increase) {
         window.location.href = "/movies";
     });
 }
+
+function addBook(bookList) {
+    fetch("/add-book", {
+        method: 'POST',
+        body: JSON.stringify({ book: bookList }),
+    }).then((_res) => {
+        window.location.href = "/books";
+    });
+}
+
+function likeBook(bookId, increase) {
+    fetch("/like-book", {
+        method: 'POST',
+        body: JSON.stringify({ bookId: bookId, increase: increase }),
+    }).then((_res) => {
+        window.location.href = "/books";
+    });
+}

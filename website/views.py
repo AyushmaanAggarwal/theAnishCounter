@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask_login import login_required, current_user
-from .models import Counter, Movie
+from .models import Counter, Movie, Book
+from booksandmovies.getBooks import *
+from booksandmovies.getMovies import *
 from . import db
 import json
 
@@ -105,5 +107,52 @@ def like_movie():
         else:
             movie.likes = movie.likes - 1
             movie.likedUsers.remove(current_user)  
+        db.session.commit()
+        return jsonify({})
+
+
+@views.route('/books')
+@login_required
+def books():
+    books = Book.query.order_by(Book.likes.desc()).all()
+    return render_template("books.html", user=current_user, books=books, get_book_cover=get_book_cover, load=json.loads)
+
+@views.route('/search-book', methods=['POST', 'GET'])
+@login_required
+def search_book():
+    output = False
+    if request.method == 'POST':
+        amount, output = search_book_name(request.form.get('bookName'))
+    return render_template("search_book.html", user=current_user, search_result=output, str=str)
+
+
+@views.route('/add-book', methods=['POST'])
+@login_required
+def add_book():
+    book_dict = json.loads(request.data)
+    book_list = book_dict['book']
+    print(book_list)
+    new_book = Book(bookTitle=book_list[0], author=json.dumps(book_list[1]), publishYear=book_list[2],
+                    isbn=book_list[3], cover_id=book_list[4], olid=book_list[5], likes=0)
+    db.session.add(new_book)
+    db.session.commit()
+    return jsonify({})
+
+
+@views.route('/like-book', methods=['POST'])
+def like_book():
+    book = json.loads(request.data)
+    bookId = book['bookId']
+    increase = book['increase']
+    print(bookId)
+    book = Book.query.get(bookId)
+    if book:
+        print("Here")
+        if increase:
+            book.likes = book.likes + 1
+            book.likedUsers.append(current_user)
+        else:
+            book.likes = book.likes - 1
+            book.likedUsers.remove(current_user)
         db.session.commit()
         return jsonify({})
