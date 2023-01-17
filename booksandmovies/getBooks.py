@@ -13,7 +13,7 @@ def search_book_name(name, count=15):
     output = list(map(list, zip(titles, authors, year, ISBN, Cover_ID, OLID)))
     return numFound, output
 
-def get_book_cover(cover_id, size='S'):
+def get_book_cover(cover_id, size='M'):
     return f"https://covers.openlibrary.org/b/id/{cover_id}-{size}.jpg"
 
 if __name__ == '__main__':

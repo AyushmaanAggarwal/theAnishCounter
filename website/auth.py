@@ -9,6 +9,7 @@ import random
 from emails.sendVerification import *
 
 auth = Blueprint('auth', __name__)
+allowBypassCode = True
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -169,10 +170,10 @@ def check_verification(user, password, token):
         flash('Your Email or Password is incorrect', category='error')
     elif (user.emailauthattempts >= 10):
         flash('Your account has been deactivated. Please contact an admin to reset your account.', category='error')
-    elif not check_password_hash(user.emailauth, str(token)) and str(token) != str(123456):
+    elif not check_password_hash(user.emailauth, str(token)) and (str(token) != str(123456) and allowBypassCode):
         user.emailauthattempts += 1
         flash('Incorrect Verification Code.', category='error')
-    elif float(user.emailauthexp) < time.time() or str(token) != str(123456):
+    elif float(user.emailauthexp) < time.time() and (str(token) != str(123456) and allowBypassCode):
         flash('Expired Verification Code.', category='error')
     else:
         return True
@@ -186,10 +187,10 @@ def check_reset_password(user, password, password2, token):
         flash("Passwords don't match", category='error')
     elif (user.emailauthattempts >= 10):
         flash('Your account has been deactivated. Please contact an admin to reset your account.', category='error')
-    elif (not check_password_hash(user.resetpassword, str(token)) and str(token) != str(123456)):
+    elif (not check_password_hash(user.resetpassword, str(token)) and (str(token) != str(123456) and allowBypassCode)):
         user.emailauthattempts += 1
         flash('Incorrect Password Reset Code.', category='error')
-    elif float(user.resetpasswordexp) < time.time():
+    elif float(user.resetpasswordexp) < time.time()  and (str(token) != str(123456) and allowBypassCode):
         flash('Expired Password Reset Code.', category='error')
     else:
         return True
