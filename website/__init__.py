@@ -4,9 +4,12 @@ from os import path
 from flask_login import LoginManager, current_user, AnonymousUserMixin
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from apscheduler.schedulers.background import BackgroundScheduler
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
+
+scheduler = BackgroundScheduler(daemon=True)
 
 class MyView(ModelView):
     def is_accessible(self):
@@ -45,6 +48,10 @@ def create_app():
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
+
+    from .lateness import reset_day_lateness
+    scheduler.add_job(func=lambda: reset_day_lateness(app), trigger="interval", seconds=60)
+    scheduler.start()
 
     return app
 

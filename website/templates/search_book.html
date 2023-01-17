@@ -32,7 +32,7 @@
         {% for book in search_result %}
         <tr>
             <td> {{ book[0] }} </td>
-            <td> {{ str(book[1])[1:-1] }} </td>
+            <td> {{ str(book[1])[1:-1].replace("'", "") }} </td>
             <td> {{ book[2] }} </td>
             <td> {{ book[3] }} </td>
             <td type="button" class="close" onClick="addBook( {{ book }} )"> <button> Add </button> </td>
