@@ -24,3 +24,12 @@ function likeMovie(movieId, increase) {
         window.location.href = "/movies";
     });
 }
+
+function markHere(latenessId, here) {
+    fetch("/mark-here", {
+        method: 'POST',
+        body: JSON.stringify({ latenessId: latenessId, here: here }),
+    }).then((_res) => {
+        window.location.href = "/lateness-tracker";
+    });
+}
