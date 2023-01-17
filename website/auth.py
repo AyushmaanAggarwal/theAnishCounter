@@ -50,7 +50,7 @@ def sign_up():
         password2 = request.form.get('password2')
 
         user = User.query.filter_by(email=email).first()
-        if not re.fullmatch(r"^\w+@berkeley\.edu$", email):
+        if not re.fullmatch(r"^[\w\.-]+@berkeley\.edu$", email):
             flash('Not a berkeley email', category="error")
         elif user:
             flash('Email already exists.', category='error')
