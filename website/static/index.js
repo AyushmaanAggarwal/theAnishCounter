@@ -51,3 +51,13 @@ function markHere(latenessId, here) {
         window.location.href = "/lateness-tracker";
     });
 }
+
+
+// Clock, directly from Stack Overflow
+
+window.onload = displayClock();
+function displayClock(){
+  var display = new Date().toLocaleTimeString();
+  document.getElementById("time").textContent = display
+  setTimeout(displayClock, 1000); 
+}
