@@ -22,6 +22,19 @@ dates = [datetime.date(2023, 1, 18), datetime.date(2023, 1, 20), datetime.date(2
             datetime.date(2023, 4, 21), datetime.date(2023, 4, 24), datetime.date(2023, 4, 26),
             datetime.date(2023, 4, 28)]
 
+def reset_day_lateness(app):
+    with app.app_context():
+        pst_tz = datetime.timezone(offset=-datetime.timedelta(hours=8))
+        curr_time = datetime.datetime.now(pst_tz)
+        if (curr_time.date() in dates and curr_time.hour == 9 and curr_time.minute == 0):
+            for tracker in Lateness.query.all():
+                if not tracker.arrived:                    
+                    tracker.lateTotal = tracker.lateTotal + 50
+                tracker.arrived = False
+                tracker.lastTime = None
+
+                db.session.commit()
+
 @late.route('/lateness-tracker', methods=['GET', 'POST'])
 @login_required
 def lateness_home():
