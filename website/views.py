@@ -144,10 +144,8 @@ def like_book():
     book = json.loads(request.data)
     bookId = book['bookId']
     increase = book['increase']
-    print(bookId)
     book = Book.query.get(bookId)
     if book:
-        print("Here")
         if increase:
             book.likes = book.likes + 1
             book.likedUsers.append(current_user)
