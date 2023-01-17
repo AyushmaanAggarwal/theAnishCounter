@@ -7,7 +7,7 @@
 <ul>
     {% for book in books %}
     <li>
-        {{ book.bookTitle }} | {{ load(book.author) }} | {{ book.publishYear }}
+        {{ book.bookTitle }} | {{ load(book.author[1:-1].replace("'", "")) }} | {{ book.publishYear }}
         {{ book.isbn }} | <img src="{{ get_book_cover(book.cover_id) }}">
         {% if user in book.likedUsers %}
         <button type="button" class="close" onClick="likeBook('{{ book.id }}', false)">
