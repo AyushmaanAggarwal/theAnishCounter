@@ -9,9 +9,8 @@ db = SQLAlchemy()
 DB_NAME = "database.db"
 
 class MyView(ModelView):
-    pass
-#    def is_accessible(self):
-#        return not isinstance(current_user._get_current_object(), AnonymousUserMixin) and current_user.testlevel == 'admin'
+    def is_accessible(self):
+        return not isinstance(current_user._get_current_object(), AnonymousUserMixin) and current_user.testlevel == 'admin'
 
 def create_app():
     app = Flask(__name__)
