@@ -1,10 +1,16 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user, AnonymousUserMixin
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
+
+class MyView(ModelView):
+    def is_accessible(self):
+        return not isinstance(current_user._get_current_object(), AnonymousUserMixin) and current_user.testlevel == 'admin'
 
 def create_app():
     app = Flask(__name__)
@@ -12,13 +18,23 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     db.init_app(app)
 
+    admin = Admin(app)
+
     from .views import views
     from .auth import auth
+    from .lateness import late
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
+    app.register_blueprint(late, url_prefix='/')
 
-    from .models import User
+    from .models import User, Counter, Movie, Book, Lateness
+
+    admin.add_view(MyView(User, db.session))
+    admin.add_view(MyView(Counter, db.session))
+    admin.add_view(MyView(Movie, db.session))
+    admin.add_view(MyView(Book, db.session))
+    admin.add_view(MyView(Lateness, db.session))
 
     create_database(app)
 

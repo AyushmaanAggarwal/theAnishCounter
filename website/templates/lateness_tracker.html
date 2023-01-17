@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Lateness Tracker{% endblock %}
+
+{% block content %}
+<h1> {{ curr_time.time() }} </h1>
+
+{% if (curr_time.date() in dates and curr_time.hour == 8) %}
+    {% for user in tracking %}
+        {% if user.arrived %}
+        <form method="POST">
+            <button type="submit" onClick="markHere('{{ user.id }}', false)" style="background-color: crimson;"> {{ user.name }} </button> {{ user.lastTime.hour }}:{{ user.lastTime.minute }} 
+        </form>
+        {% else %}
+        <form method="POST">
+            <button type="submit" onClick="markHere('{{ user.id }}', true)" style="background-color: green;"> {{ user.name }} </button>
+        </form>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<ol>
+    {% for user in ordered_tracking %}
+    <li> {{ user.name }}  {{ user.lateTotal }} </li>
+    {% endfor %}
+</ol>
+
+
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Add Book{% endblock %}
+
+{% block content %}
+
+<form method="POST">
+    <div class="form-group">
+        <label for="bookName">Book Title</label>
+        <input
+                type="bookName"
+                class="form-control"
+                id="bookName"
+                name="bookName"
+                placeholder="Enter suggested book title"
+        />
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>
+
+{% if search_result %}
+<table>
+    <thead>
+        <tr>
+            <th> Title </th>
+            <th> Author </th>
+            <th> Year Published </th>
+            <th> ISBN </th>
+            <th> Click Button to Add</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in search_result %}
+        <tr>
+            <td> {{ book[0] }} </td>
+            <td> {{ str(book[1])[1:-1] }} </td>
+            <td> {{ book[2] }} </td>
+            <td> {{ book[3] }} </td>
+            <td type="button" class="close" onClick="addBook( {{ book }} )"> <button> Add </button> </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock %}
