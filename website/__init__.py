@@ -28,11 +28,12 @@ def create_app():
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(late, url_prefix='/')
 
-    from .models import User, Counter, Movie, Lateness
+    from .models import User, Counter, Movie, Book, Lateness
 
     admin.add_view(MyView(User, db.session))
     admin.add_view(MyView(Counter, db.session))
     admin.add_view(MyView(Movie, db.session))
+    admin.add_view(MyView(Book, db.session))
     admin.add_view(MyView(Lateness, db.session))
 
     create_database(app)

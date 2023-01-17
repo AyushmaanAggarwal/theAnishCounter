@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Books{% endblock %}
+
+{% block content %}
+
+<h1 align="center">Book Club List</h1>
+<ul>
+    {% for book in books %}
+    <li>
+        {{ book.bookTitle }} | {{ load(book.author) }} | {{ book.publishYear }}
+        {{ book.isbn }} | <img src="{{ get_book_cover(book.cover_id) }}">
+        {% if user in book.likedUsers %}
+        <button type="button" class="close" onClick="likeBook('{{ book.id }}', false)">
+            <span aria-hidden="true">{{ book.likes }} <FONT COLOR = "#ff0000">&hearts;</FONT></span>
+        </button>
+        {% else %}
+        <button type="button" class="close" onClick="likeBook('{{ book.id }}', true)">
+            <span aria-hidden="true">{{ book.likes }} &hearts;</span>
+        </button>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+<a href="/search-book">
+    <button>Add A Book</button>
+</a>
+
+{% endblock %}

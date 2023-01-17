@@ -39,3 +39,20 @@ class Lateness(db.Model):
     lateTotal = db.Column(db.Integer)
     arrived = db.Column(db.Boolean)
     lastTime = db.Column(db.DateTime)
+    user = db.relationship("User", back_populates="lateness_counter")
+
+
+book_likes = db.Table('book_likes',
+                        db.Column('book_id', db.Integer, db.ForeignKey('book.id')),
+                        db.Column('user_id', db.Integer, db.ForeignKey('user.id')))
+
+class Book(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    bookTitle = db.Column(db.String(150))
+    author = db.Column(db.String(150))
+    publishYear = db.Column(db.Integer)
+    isbn = db.Column(db.Integer)
+    cover_id = db.Column(db.Integer)
+    olid = db.Column(db.Integer)
+    likes = db.Column(db.Integer)
+    likedUsers = db.relationship('User', secondary=book_likes, backref='books')
