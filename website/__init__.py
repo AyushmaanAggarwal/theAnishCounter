@@ -22,16 +22,19 @@ def create_app():
 
     from .views import views
     from .auth import auth
+    from .lateness import late
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
+    app.register_blueprint(late, url_prefix='/')
 
-    from .models import User, Counter, Movie, Book
+    from .models import User, Counter, Movie, Book, Lateness
 
     admin.add_view(MyView(User, db.session))
     admin.add_view(MyView(Counter, db.session))
     admin.add_view(MyView(Movie, db.session))
     admin.add_view(MyView(Book, db.session))
+    admin.add_view(MyView(Lateness, db.session))
 
     create_database(app)
 
