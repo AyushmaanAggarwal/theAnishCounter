@@ -12,8 +12,10 @@ def send_verification_email(to_address, name, code):
 
     try:
         gmail_send_message(to_address, "theanishcounter@gmail.com", subject, message)
+        return True
     except:
         print("Failed to send email")
+        return False
         pass
 
 def send_password_reset(to_address, name, code):
