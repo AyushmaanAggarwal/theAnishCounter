@@ -4,3 +4,4 @@ website/__pycache__
 instance/
 emails/*.json
 emails/__pycache__/
+booksandmovies/__pycache__/

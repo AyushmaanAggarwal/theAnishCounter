@@ -4,7 +4,6 @@ def search_book_name(name, count=15):
     book_name = name.replace(" ", "+")
     req = requests.get(f"http://openlibrary.org/search.json?title={name}")
     numFound = req.json()["numFound"]
-    print(req.json()["docs"][0:count][0].keys())
     titles = [book['title'] for book in req.json()["docs"][0:count]]
     authors = [book.get('author_name', "") for book in req.json()["docs"][0:count]]
     year = [book.get('first_publish_year', 0) for book in req.json()["docs"][0:count]]
