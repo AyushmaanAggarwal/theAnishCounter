@@ -2,27 +2,63 @@
 {% block title %}Lateness Tracker{% endblock %}
 
 {% block content %}
-<h1> {{ curr_time.time() }} </h1>
+<div class="row justify-content-center">
+    <div class="col-auto">
+        <h1 id="time" class="m-4"> </h1>
+    </div>
+</div>
 
-{% if (curr_time.date() in dates and curr_time.hour == 8) %}
+{% if (curr_time.date() in dates and curr_time.hour == 20) %}
+<div class='row text-center justify-content-center'>
     {% for user in tracking %}
-        {% if user.arrived %}
-        <form method="POST">
-            <button type="submit" onClick="markHere('{{ user.id }}', false)" style="background-color: crimson;"> {{ user.name }} </button> {{ user.lastTime.hour }}:{{ user.lastTime.minute }} 
-        </form>
-        {% else %}
-        <form method="POST">
-            <button type="submit" onClick="markHere('{{ user.id }}', true)" style="background-color: green;"> {{ user.name }} </button>
-        </form>
-        {% endif %}
+    <div class='col-5 lateness-box p-2 m-2'>
+        <h2 class="m-3">{{ user.name }}</h2>
+        <div class="m-3">
+            {% if user.arrived %}
+            <form method="POST">
+                <button type="submit" onClick="markHere('{{ user.id }}', false)" class="btn btn-outline-secondary"> Arrived!
+                    {% if user.lastTime.minute < 10 %}
+                        {{ user.lastTime.hour }}:0{{ user.lastTime.minute }}
+                    {% else %}
+                        {{ user.lastTime.hour }}:{{ user.lastTime.minute }}
+                    {% endif %}
+                </button>
+            </form>
+            {% else %}
+            <form method="POST">
+                <button type="submit" onClick="markHere('{{ user.id }}', true)" class="btn btn-primary"> Here </button> 
+            </form>
+            {% endif %}
+        </div>
+    </div>
     {% endfor %}
+</div>
+
+<hr class="m-5"/>
+
 {% endif %}
 
-<ol>
-    {% for user in ordered_tracking %}
-    <li> {{ user.name }}  {{ user.lateTotal }} </li>
-    {% endfor %}
-</ol>
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Rank</th>
+        <th scope="col">Name</th>
+        <th scope="col">Minutes Late</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for user in ordered_tracking|reverse %}
+        <tr>
+            <th scope="row">{{ loop.index }}</th>
+            <td>{{ user.name }}</td>
+            <td>{{ user.lateTotal }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
 
+<br/>
+
+<p class="small mb-5">Welcome to the club. Today, we present the most fundamental chickens of them all. That's right, E equals em see too.</p>
 
 {% endblock %}
