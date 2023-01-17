@@ -39,7 +39,6 @@ class Lateness(db.Model):
     lateTotal = db.Column(db.Integer)
     arrived = db.Column(db.Boolean)
     lastTime = db.Column(db.DateTime)
-    user = db.relationship("User", back_populates="lateness_counter")
 
 
 book_likes = db.Table('book_likes',
