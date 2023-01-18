@@ -37,7 +37,7 @@ class Lateness(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150))
     lateTotal = db.Column(db.Integer)
-    arrived = db.Column(db.Boolean)
+    lastArrived = db.Column(db.DateTime)
     lastTime = db.Column(db.DateTime)
 
 
