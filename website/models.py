@@ -13,6 +13,7 @@ class User(db.Model, UserMixin):
     resetpasswordexp = db.Column(db.Integer()) # Used for checking expiration date for password reset
     password = db.Column(db.String(150))
     testlevel = db.Column(db.String(10))
+    createdBooks = db.relationship('Book')
 
 class Counter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -55,3 +56,4 @@ class Book(db.Model):
     olid = db.Column(db.Integer)
     likes = db.Column(db.Integer)
     likedUsers = db.relationship('User', secondary=book_likes, backref='books')
+    creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
