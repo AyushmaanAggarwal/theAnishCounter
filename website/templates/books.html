@@ -32,7 +32,7 @@
                 <img src="{{ get_book_cover(book.cover_id) }}" width="40" height="auto"/>
             </td>
             <th class="col-3" scope="row">{{ book.bookTitle }}</th>
-            <td class="col-3">{{ load(book.author[1:-1].replace("'", "")) }}</td>
+            <td class="col-3">{{ book.author[1:-1].replace("\"", "")}}</td>
             <td class="col-1">{{ book.publishYear }}</td>
             <td class="col-2">{{ book.isbn }}</td>
         </tr>
