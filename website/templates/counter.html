@@ -3,22 +3,38 @@
 
 {% block content %}
 <h1 align="center">Counters</h1>
-<ul>
-    {% for counter in counters %}
-    <li>
-        {{ counter.counterName }} | {{counter.description}} | {{counter.counts}}
-        <button type="button" class="close" onClick="deleteCounter('{{ counter.id }}')">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <button type="button" class="close" onClick="increaseCounter('{{ counter.id }}', true)">
-            <span aria-hidden="true">&#43;</span>
-        </button>
-        <button type="button" class="close" onClick="increaseCounter('{{ counter.id }}', false)">
-            <span aria-hidden="true">-</span>
-        </button>
-    </li>
-    {% endfor %}
-</ul>
+<table class="table">
+    <thead class="thead-dark">
+      <tr class="d-flex">
+        <th class="col-2" scope="col">Name</th>
+        <th class="col-4" scope="col">Description</th>
+        <th class="col-2" scope="col">Count</th>
+        <th class="col-1" scope="col">Add</th>
+        <th class="col-1" scope="col">Subtract</th>
+        <th class="col-1" scope="col">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for counter in counters %}
+        {% if counter.counterName[0] != "." %}
+        <tr class="d-flex">
+            <th class="col-2" scope="row">{{ counter.counterName }}</th>
+            <td class="col-4">{{ counter.description }}</td>
+            <td class="col-2">{{ counter.counts }}</td>
+            <td class="col-1">
+                <button type="button" class="btn btn-outline-secondary" onclick="increaseCounter('{{ counter.id }}', true)">&#43;</button>
+            </td>
+            <td class="col-1">
+                <button type="button" class="btn btn-outline-secondary" onclick="increaseCounter('{{ counter.id }}', false)">-</button>
+            </td>
+            <td class="col-1">
+                <button type="button" class="btn btn-outline-secondary" onclick="deleteCounter('{{ counter.id }}')">&times;</button>
+            </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+  </table>
 <a href="/new-counter">
     <button>Make New Counter</button>
 </a>
