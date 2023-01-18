@@ -28,9 +28,9 @@ def reset_day_lateness(app):
         curr_time = datetime.datetime.now(pst_tz)
         if (curr_time.date() in dates and curr_time.hour == 9 and curr_time.minute == 0):
             for tracker in Lateness.query.all():
-                if not tracker.arrived:                    
+                if not tracker.arrived and tracker.lastArrived == curr_time.date():                    
                     tracker.lateTotal = tracker.lateTotal + 50
-                tracker.arrived = False
+                    tracker.lastArrived = curr_time.date()
                 tracker.lastTime = None
 
                 db.session.commit()
