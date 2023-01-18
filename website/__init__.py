@@ -6,8 +6,18 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_migrate import Migrate
 from apscheduler.schedulers.background import BackgroundScheduler
+from sqlalchemy import MetaData
 
-db = SQLAlchemy()
+convention = {
+    "ix": 'ix_%(column_0_label)s',
+    "uq": "uq_%(table_name)s_%(column_0_name)s",
+    "ck": "ck_%(table_name)s_%(constraint_name)s",
+    "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
+    "pk": "pk_%(table_name)s"
+}
+metadata = MetaData(naming_convention=convention)
+db = SQLAlchemy(metadata=metadata)
+
 DB_NAME = "database.db"
 
 scheduler = BackgroundScheduler(daemon=True)
@@ -18,8 +28,10 @@ class MyView(ModelView):
 
 def create_app():
     app = Flask(__name__)
+
     app.config['SECRET_KEY'] = 'spring'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+
     db.init_app(app)
 
     admin = Admin(app)
@@ -39,7 +51,7 @@ def create_app():
     admin.add_view(MyView(Movie, db.session))
     admin.add_view(MyView(Book, db.session))
     admin.add_view(MyView(Lateness, db.session))
-    migrate = Migrate(app, db)
+    migrate = Migrate(app, db, render_as_batch=True)
     create_database(app)
 
     login_manager = LoginManager()
