@@ -4,7 +4,7 @@ from os import path
 from flask_login import LoginManager, current_user, AnonymousUserMixin
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from flask_migrate import Migrate
+# from flask_migrate import Migrate
 from apscheduler.schedulers.background import BackgroundScheduler
 from sqlalchemy import MetaData
 
@@ -51,7 +51,7 @@ def create_app():
     admin.add_view(MyView(Movie, db.session))
     admin.add_view(MyView(Book, db.session))
     admin.add_view(MyView(Lateness, db.session))
-    migrate = Migrate(app, db, render_as_batch=True)
+    # migrate = Migrate(app, db, render_as_batch=True)
     create_database(app)
 
     login_manager = LoginManager()
