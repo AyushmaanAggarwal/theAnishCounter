@@ -133,7 +133,7 @@ def add_book():
     book_list = book_dict['book']
     print(book_list)
     new_book = Book(bookTitle=book_list[0], author=json.dumps(book_list[1]), publishYear=book_list[2],
-                    isbn=book_list[3], cover_id=book_list[4], olid=book_list[5], likes=0, creator_id=current_user)
+                    isbn=book_list[3], cover_id=book_list[4], olid=book_list[5], likes=0, creator_id=current_user.id)
     db.session.add(new_book)
     db.session.commit()
     return jsonify({})
