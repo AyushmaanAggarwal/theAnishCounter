@@ -5,6 +5,7 @@ instance/
 emails/*.json
 emails/__pycache__/
 booksandmovies/__pycache__
+migrations/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
