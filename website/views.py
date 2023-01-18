@@ -61,7 +61,7 @@ def delete_counter():
     counterId = counter['counterId']
     counter = Counter.query.get(counterId)
     if counter:
-        db.session.delete(counter)
+        counter.counterName = "." + counter.counterName
         db.session.commit()
         return jsonify({})
 
