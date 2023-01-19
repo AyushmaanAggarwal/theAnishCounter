@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from .models import Counter, Movie, Book
 from booksandmovies.getBooks import *
 from booksandmovies.getMovies import *
+from forms import *
 from . import db
 import json
 
@@ -154,3 +155,18 @@ def like_book():
             book.likedUsers.remove(current_user)
         db.session.commit()
         return jsonify({})
+
+
+@views.route('/schedule', methods=['GET', 'POST'])
+def schedule():
+    schedule_list = current_user.get_schedule()
+    return render_template('schedule.html', schedule=schedule_list)
+
+
+@views.route('/new-schedule', methods=['GET', 'POST'])
+def new_schedule():
+    new_course_form = CourseForm()
+    if new_course_form.validate_on_submit():
+        pass
+
+    return render_template('new-schedule.html')
