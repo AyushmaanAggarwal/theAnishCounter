@@ -28,7 +28,7 @@ def reset_day_lateness(app):
         curr_time = datetime.datetime.now(pst_tz)
         if (curr_time.date() in dates and curr_time.hour == 9 and curr_time.minute == 0):
             for tracker in Lateness.query.all():
-                if not tracker.arrived and (tracker.lastTime == None or tracker.lastTime != curr_time.date()):                    
+                if (tracker.lastTime == None or tracker.lastTime != curr_time.date()):                    
                     tracker.lateTotal = tracker.lateTotal + 50
                     tracker.lastTime = curr_time.date()
 
@@ -56,13 +56,11 @@ def mark_here():
 
     if tracker:
         pst_tz = datetime.timezone(offset=-datetime.timedelta(hours=8))
-        if here and not tracker.arrived:
+        if here:
             tracker.lateTotal = tracker.lateTotal + max(datetime.datetime.now(pst_tz).minute - 10, 0)
-            tracker.arrived = True
             tracker.lastTime = datetime.datetime.now(pst_tz)
-        elif not here and tracker.arrived:
+        elif not here:
             tracker.lateTotal = tracker.lateTotal - max(tracker.lastTime.minute - 10, 0)
-            tracker.arrived = False
             tracker.lastTime = None
         db.session.commit()
         return jsonify({})
