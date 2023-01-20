@@ -14,7 +14,11 @@
     <div class='col-5 lateness-box p-2 m-2'>
         <h2 class="m-3">{{ user.name }}</h2>
         <div class="m-3">
-            {% if user.arrived %}
+            {% if (tracker.lastTime == None or tracker.lastTime != curr_time.date()) %}
+            <form method="POST">
+                <button type="submit" onClick="markHere('{{ user.id }}', true)" class="btn btn-primary"> Here </button> 
+            </form>
+            {% else %}
             <form method="POST">
                 <button type="submit" onClick="markHere('{{ user.id }}', false)" class="btn btn-outline-secondary"> Arrived!
                     {% if user.lastTime.minute < 10 %}
@@ -23,10 +27,6 @@
                         {{ user.lastTime.hour }}:{{ user.lastTime.minute }}
                     {% endif %}
                 </button>
-            </form>
-            {% else %}
-            <form method="POST">
-                <button type="submit" onClick="markHere('{{ user.id }}', true)" class="btn btn-primary"> Here </button> 
             </form>
             {% endif %}
         </div>
