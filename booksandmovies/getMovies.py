@@ -4,6 +4,7 @@ import json
 import re
 import time
 import random
+import urllib
 
 def to_numeric(string, num_type='int'):
     '''
@@ -20,7 +21,7 @@ def to_numeric(string, num_type='int'):
         x = string
     return x
 
-def imdb_scrape(imdb_id,):
+def imdb_scrape(imdb_id):
     '''
     Function which scrapes IMDb using IMDb ID 'tt0107290'. Second parameter is for 
     the movie poster (saved in /posters/ folder). Third parameter is to print result.
@@ -50,10 +51,17 @@ def imdb_scrape(imdb_id,):
     
     imdb_base_url = 'https://www.imdb.com/title/'
     print(f'{imdb_id.ljust(10)} ', end='')
-    
+
+    API_KEY = 'b9a0563b-3513-4500-83f0-966779396518'
+
+    def get_scrapeops_url(url):
+        payload = {'api_key': API_KEY, 'url': url}
+        proxy_url = 'https://proxy.scrapeops.io/v1/?' + urllib.parse.urlencode(payload)
+        return proxy_url
+
     # Main content - build URL, and soup content
     imdb_full_url = imdb_base_url + imdb_id
-    r = requests.get(imdb_full_url).content
+    r = requests.get(get_scrapeops_url(imdb_full_url)).content
     soup = BeautifulSoup(r, 'html.parser')
     print(f'[x]   ', end='')
     
@@ -107,4 +115,4 @@ def imdb_scrape(imdb_id,):
     return imdb_info_dict
 
 if __name__ == '__main__':
-    print(imdb_scrape('tt1160419'))
+    print(imdb_scrape('tt0107290'))
