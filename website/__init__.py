@@ -20,7 +20,7 @@ db = SQLAlchemy(metadata=metadata)
 
 DB_NAME = "database.db"
 
-scheduler = BackgroundScheduler(daemon=True)
+scheduler = BackgroundScheduler(timezone="America/Los_Angeles", daemon=True)
 
 class MyView(ModelView):
     def is_accessible(self):
@@ -63,7 +63,7 @@ def create_app():
         return User.query.get(int(id))
 
     from .lateness import reset_day_lateness
-    scheduler.add_job(func=lambda: reset_day_lateness(app), trigger="interval", seconds=60)
+    scheduler.add_job(func=lambda: reset_day_lateness(app), trigger='cron', month='1-5', day_of_week='mon, wed, fri', hour=9, minute=0, second=0)
     scheduler.start()
 
     return app

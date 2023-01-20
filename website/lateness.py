@@ -26,11 +26,11 @@ def reset_day_lateness(app):
     with app.app_context():
         pst_tz = datetime.timezone(offset=-datetime.timedelta(hours=8))
         curr_time = datetime.datetime.now(pst_tz)
-        if (curr_time.date() in dates and curr_time.hour == 9 and curr_time.minute == 0):
+        if (curr_time.date() in dates):
             for tracker in Lateness.query.all():
-                if (tracker.lastTime == None or tracker.lastTime != curr_time.date()):                    
+                if (tracker.lastTime == None or tracker.lastTime.date() != curr_time.date()):
                     tracker.lateTotal = tracker.lateTotal + 50
-                    tracker.lastTime = curr_time.date()
+                    tracker.lastTime = curr_time
 
                 db.session.commit()
 
