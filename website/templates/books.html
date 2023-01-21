@@ -10,9 +10,9 @@
         <th class="col-1" scope="col">Like</th>
         <th class="col-2" scope="col">Cover</th>
         <th class="col-3" scope="col">Title</th>
-        <th class="col-3" scope="col">Author</th>
+        <th class="col-2" scope="col">Author</th>
         <th class="col-1" scope="col">Pubished Year</th>
-        <th class="col-2" scope="col">ISBN</th>
+        <th class="col-1" scope="col">ISBN</th>
       </tr>
     </thead>
     <tbody>
@@ -32,9 +32,9 @@
                 <img src="{{ get_book_cover(book.cover_id) }}" width="40" height="auto"/>
             </td>
             <th class="col-3" scope="row">{{ book.bookTitle }}</th>
-            <td class="col-3">{{ book.author[1:-1].replace("\"", "")}}</td>
+            <td class="col-2">{{ book.author[1:-1].replace("\"", "")}}</td>
             <td class="col-1">{{ book.publishYear }}</td>
-            <td class="col-2">{{ book.isbn }}</td>
+            <td class="col-1">{{ book.isbn }}</td>
         </tr>
         {% endfor %}
     </tbody>

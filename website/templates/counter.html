@@ -5,21 +5,21 @@
 <h1 align="center">Counters</h1>
 <table class="table">
     <thead class="thead-dark">
-      <tr class="d-flex">
+      <tr>
         <th class="col-2" scope="col">Name</th>
-        <th class="col-4" scope="col">Description</th>
+        <th class="col-3" scope="col">Description</th>
         <th class="col-2" scope="col">Count</th>
-        <th class="col-1" scope="col">Add</th>
-        <th class="col-1" scope="col">Subtract</th>
-        <th class="col-1" scope="col">Delete</th>
+        <th class="col-1" scope="col"></th>
+        <th class="col-1" scope="col"></th>
+        <th class="col-1" scope="col"></th>
       </tr>
     </thead>
     <tbody>
         {% for counter in counters %}
         {% if counter.counterName[0] != "." %}
-        <tr class="d-flex">
+        <tr>
             <th class="col-2" scope="row">{{ counter.counterName }}</th>
-            <td class="col-4">{{ counter.description }}</td>
+            <td class="col-3">{{ counter.description }}</td>
             <td class="col-2">{{ counter.counts }}</td>
             <td class="col-1">
                 <button type="button" class="btn btn-outline-secondary" onclick="increaseCounter('{{ counter.id }}', true)">&#43;</button>
