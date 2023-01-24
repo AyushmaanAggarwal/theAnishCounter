@@ -30,9 +30,11 @@ def send_password_reset(to_address, name, code):
 
     try:
         gmail_send_message(to_address, "theanishcounter@gmail.com", subject, message)
-    except:
+        return True
+    except Exception as e:
+        print(e)
         print("Failed to send email")
-        pass
+        return False
 
 if __name__ == '__main__':
     send_verification_email("theanishcounter@gmail.com", "Obi Wan Kenobi", 123456)
