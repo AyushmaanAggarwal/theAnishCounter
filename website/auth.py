@@ -117,7 +117,9 @@ def resend_verification_code():
                 user.resetpassword = generate_password_hash(new_auth, method='sha256')
                 user.resetpasswordexp = time.time() + 24*3600
                 user.emailauthattempts = 0
-                send_password_reset(user.email, user.username, new_auth)
+                if not send_password_reset(user.email, user.username, new_auth):
+                    flash('FAILED TO SEND EMAIL: please contact a website admin', category='error')
+
                 db.session.commit()
                 flash('Reset password.', category='success')
                 return redirect(url_for('auth.reset_password'))
@@ -128,7 +130,9 @@ def resend_verification_code():
             user.emailauth = generate_password_hash(new_auth, method='sha256')
             user.emailauthexp = time.time() + 24*3600
             user.emailauthattempts = 0
-            send_verification_email(user.email, user.username, new_auth)
+            if send_verification_email(user.email, user.username, new_auth):
+                flash('FAILED TO SEND EMAIL: please contact a website admin', category='error')
+
             db.session.commit()
             flash('Reset verification code.', category='success')
             return redirect(url_for('auth.verify_email'))
