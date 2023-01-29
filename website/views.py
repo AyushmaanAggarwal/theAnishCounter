@@ -115,7 +115,9 @@ def like_movie():
 @login_required
 def books():
     books = Book.query.order_by(Book.likes.desc()).all()
-    return render_template("books.html", user=current_user, books=books, get_book_cover=get_book_cover, load=json.loads)
+    pastBooks = any([book.bookTitle[0]=='.' for book in books])
+    currentBooks = any([book.bookTitle[0]=='_' for book in books])
+    return render_template("books.html", user=current_user, books=books, get_book_cover=get_book_cover, load=json.loads, pastBooks=pastBooks, currentBooks=currentBooks)
 
 @views.route('/search-book', methods=['POST', 'GET'])
 @login_required
