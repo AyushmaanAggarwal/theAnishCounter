@@ -16,7 +16,7 @@ def home():
 @views.route('/counter')
 @login_required
 def counter():
-    counters = Counter.query.all()
+    counters = Counter.query.order_by(Counter.likes.desc()).all()
     return render_template("counter.html", user=current_user, counters=counters)
 
 @views.route('/new-counter', methods=['POST', 'GET'])
