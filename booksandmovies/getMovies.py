@@ -2,7 +2,7 @@ import requests
 
 def search_movies_name(name, count=15):
     movie_name = name.replace(" ", "+")
-    with open("../instance/movie_api", 'r') as file:
+    with open("instance/movie_api", 'r') as file:
         api_key = file.read()
     req = requests.get(f"https://www.omdbapi.com/?apikey={api_key}&s={movie_name}")
     numFound = req.json()["totalResults"]
@@ -15,7 +15,7 @@ def search_movies_name(name, count=15):
     return numFound, output
 
 def get_movie_by_imdbid(id):
-    with open("../instance/movie_api", 'r') as file:
+    with open("instance/movie_api", 'r') as file:
         api_key = file.read()
     req = requests.get(f"https://www.omdbapi.com/?apikey={api_key}&i={id}")
     title = req.json()["Title"]
@@ -31,4 +31,4 @@ def get_movie_by_imdbid(id):
     return list(map(list, zip(title, year, runtime, director, actors, plot, ratings, boxOffice, poster)))
 
 if __name__ == '__main__':
-    print("")
+    print(search_movies_name(""))
