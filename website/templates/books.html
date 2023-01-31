@@ -71,18 +71,12 @@
         {% if not book.bookTitle[0]=='.' and not book.bookTitle[0]=='_'%}
         <tr class="align-items-center">
             {% if user in book.likedUsers %}
-            <td class="col-1">
-                <button type="button" class="btn btn-outline-danger" onclick="likeBook('{{ book.id }}', false)">{{ book.likes }} &hearts;</button>
-            </td>
+            <td class="col-1"><button type="button" class="btn btn-outline-danger" onclick="likeBook('{{ book.id }}', false)">{{ book.likes }} &hearts;</button></td>
             {% else %}
-            <td class="col-1">
-                <button type="button" class="btn btn-outline-secondary" onclick="likeBook('{{ book.id }}', true)">{{ book.likes }} &hearts;</button>
-            </td>
+            <td class="col-1"><button type="button" class="btn btn-outline-secondary" onclick="likeBook('{{ book.id }}', true)">{{ book.likes }} &hearts;</button></td>
             {% endif %}
 
-            <td class="col-2">
-                <img src="{{ get_book_cover(book.cover_id) }}" width="40" height="auto"/>
-            </td>
+            <td class="col-2"><img src="{{ get_book_cover(book.cover_id) }}" width="40" height="auto"/></td>
             <th class="col-3" scope="row">{{ book.bookTitle }}</th>
             <td class="col-2">{{ book.author[1:-1].replace("\"", "")}}</td>
             <td class="col-1">{{ book.publishYear }}</td>
@@ -108,19 +102,8 @@
         {% for book in books %}
         {% if book.bookTitle[0]=='.' %}
         <tr class="align-items-center">
-            {% if user in book.likedUsers %}
-            <td class="col-1">
-                <button type="button" class="btn btn-outline-danger" onclick="likeBook('{{ book.id }}', false)">{{ book.likes }} &hearts;</button>
-            </td>
-            {% else %}
-            <td class="col-1">
-                <button type="button" class="btn btn-outline-secondary" onclick="likeBook('{{ book.id }}', true)">{{ book.likes }} &hearts;</button>
-            </td>
-            {% endif %}
-
-            <td class="col-2">
-                <img src="{{ get_book_cover(book.cover_id) }}" width="40" height="auto"/>
-            </td>
+            <td class="col-1"> </td>
+            <td class="col-2"><img src="{{ get_book_cover(book.cover_id) }}" width="40" height="auto"/></td>
             <th class="col-3" scope="row">{{ book.bookTitle[1:] }}</th>
             <td class="col-2">{{ book.author[1:-1].replace("\"", "")}}</td>
             <td class="col-1">{{ book.publishYear }}</td>

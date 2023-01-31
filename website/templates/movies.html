@@ -2,25 +2,78 @@
 {% block title %}Movies{% endblock %}
 
 {% block content %}
-<h1 align="center">Movie Night List</h1>
-<ul>
-    {% for movie in movies %}
-    <li>
-        {{ movie.movieName }} | {{movie.releaseYear}} | {{ movie.runtime }}
-        {{ movie.description }}
-        {% if user in movie.likedUsers %}
-        <button type="button" class="close" onClick="likeMovie('{{ movie.id }}', false)">
-            <span aria-hidden="true">{{ movie.likes }} <FONT COLOR = "#ff0000">&hearts;</FONT></span>
-        </button>
-        {% else %}
-        <button type="button" class="close" onClick="likeMovie('{{ movie.id }}', true)">
-            <span aria-hidden="true">{{ movie.likes }} &hearts;</span>
-        </button>
-        {% endif %}
-    </li>
-    {% endfor %}
-</ul>
-<a href="/add-movie">
-    <button>Add Movie</button>
+<br><br>
+<div class="card p-4 p-md-5 mb-4 rounded text-bg-dark">
+  <h1>Welcome to Movie Nights</h1>
+  <p class="lead my-3"></p>
+</div>
+<br>
+<h1 align="center">Future Movies & TV Shows</h1>
+<div class="table-responsive">
+<table class="table lowz">
+        <thead class="thead-dark">
+          <tr>
+            <th class="col-1" scope="col">Like</th>
+            <th class="col-2" scope="col">Poster</th>
+            <th class="col-1" scope="col">Title</th>
+            <th class="col-1" scope="col">Year</th>
+            <th class="col-1" scope="col">Rotten Tomtoes Rating</th>
+            <th class="col-4" scope="col">Plot</th>
+          </tr>
+        </thead>
+    <tbody>
+        {% for movie in movies %}
+        {% if not movie.title[0]=='.' and not movie.title[0]=='_'%}
+        <tr class="align-items-center">
+            {% if user in movie.likedUsers %}
+            <td class="col-1"><button type="button" class="btn btn-outline-danger" onclick="likeBook('{{ book.id }}', false)">{{ book.likes }} &hearts;</button></td>
+            {% else %}
+            <td class="col-1"><button type="button" class="btn btn-outline-secondary" onclick="likeBook('{{ book.id }}', true)">{{ book.likes }} &hearts;</button></td>
+            {% endif %}
+
+            <td class="col-2"><img src="{{ movie.posterUrl }}" width="40" height="auto"/></td>
+            <th class="col-1" scope="row">{{ movie.title }}</th>
+            <td class="col-1">{{ book.year }}</td>
+            <td class="col-1">{{ book.rating }}</td>
+            <td class="col-4">{{ book.plot }}</td>
+        </tr>
+        {% endif%}
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
+  <br>
+<div class="fixed">
+<a href="/search-book">
+    <button class="btn btn-outline-secondary whitebg">Add A Book</button>
 </a>
+</div>
+
+{% if pastMovies %}
+<h1 align="center">Past Books</h1>
+<div class="table-responsive">
+<table class="table lowz">
+   <tbody>
+        {% for movie in movies %}
+        {% if movie.title[0]=='.' %}
+        <tr class="align-items-center">
+            {% if user in movie.likedUsers %}
+            <td class="col-1"><button type="button" class="btn btn-outline-danger" onclick="likeBook('{{ book.id }}', false)">{{ book.likes }} &hearts;</button></td>
+            {% else %}
+            <td class="col-1"><button type="button" class="btn btn-outline-secondary" onclick="likeBook('{{ book.id }}', true)">{{ book.likes }} &hearts;</button></td>
+            {% endif %}
+
+            <td class="col-2"><img src="{{ movie.posterUrl }}" width="40" height="auto"/></td>
+            <th class="col-1" scope="row">{{ movie.title }}</th>
+            <td class="col-1">{{ book.year }}</td>
+            <td class="col-1">{{ book.rating }}</td>
+            <td class="col-4">{{ book.plot }}</td>
+        </tr>
+        {% endif%}
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+<br><br>
 {% endblock %}
