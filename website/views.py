@@ -66,13 +66,13 @@ def delete_counter():
         return jsonify({})
 
 @views.route('/movies')
-#@login_required
+@login_required
 def movies():
     movies = Movie.query.order_by(Movie.likes.desc()).all()
     return render_template("movies.html", user=current_user, movies=movies)
 
 @views.route('/search-movie', methods=['POST', 'GET'])
-#@login_required
+@login_required
 def search_movie():
     output = False
     if request.method == 'POST':
@@ -80,7 +80,7 @@ def search_movie():
     return render_template("search_movie.html", user=current_user, search_result=output, str=str)
 
 @views.route('/add-movie', methods=['POST'])
-#@login_required
+@login_required
 def add_movie():
     movie_dict = json.loads(request.data)
     movie_list = movie_dict['movie']
@@ -88,7 +88,7 @@ def add_movie():
     movie_data = get_movie_by_imdbid(movie_list[2])
     print(movie_data)
     new_movie = Movie(title=movie_list[0], year=movie_list[1], runtime=movie_data[2], posterUrl=movie_list[3],
-                    plot=movie_data[5], rating=str(movie_data[6]), imdb_id=movie_list[2], likes=0)#, creator_id=current_user.id)
+                    plot=movie_data[5], rating=str(movie_data[6]), imdb_id=movie_list[2], likes=0, creator_id=current_user.id)
     db.session.add(new_movie)
     db.session.commit()
     return jsonify({})
