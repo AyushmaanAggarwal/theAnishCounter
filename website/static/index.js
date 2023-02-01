@@ -16,6 +16,15 @@ function deleteCounter(counterId) {
     });
 }
 
+function addMovie(movieList) {
+    fetch("/add-movie", {
+        method: 'POST',
+        body: JSON.stringify({ movie: movieList }),
+    }).then((_res) => {
+        window.location.href = "/movies";
+    });
+}
+
 function likeMovie(movieId, increase) {
     fetch("/like-movie", {
         method: 'POST',
@@ -50,14 +59,4 @@ function markHere(latenessId, here) {
     }).then((_res) => {
         window.location.href = "/lateness-tracker";
     });
-}
-
-
-// Clock, directly from Stack Overflow
-
-window.onload = displayClock();
-function displayClock(){
-  var display = new Date().toLocaleTimeString();
-  document.getElementById("time").textContent = display
-  setTimeout(displayClock, 1000); 
 }
