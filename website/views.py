@@ -16,7 +16,7 @@ def home():
 @views.route('/counter')
 @login_required
 def counter():
-    counters = Counter.query.order_by(Counter.likes.desc()).all()
+    counters = Counter.query.order_by(Counter.counts.desc()).all()
     return render_template("counter.html", user=current_user, counters=counters)
 
 @views.route('/new-counter', methods=['POST', 'GET'])
@@ -87,8 +87,7 @@ def add_movie():
     print(movie_list)
     movie_data = get_movie_by_imdbid(movie_list[2])
     print(movie_data)
-    new_movie = Movie(title=movie_list[0], year=movie_list[1], runtime=movie_data[2], posterUrl=movie_list[3],
-                    plot=movie_data[5], rating=str(movie_data[6]), imdb_id=movie_list[2], likes=0, creator_id=current_user.id)
+    new_movie = Movie(title=movie_list[0], year=movie_list[1], runtime=movie_data[2], posterUrl=movie_list[3], plot=movie_data[5], rating=str(movie_data[6]), imdb_id=movie_list[2], likes=0, creator_id=current_user.id)
     db.session.add(new_movie)
     db.session.commit()
     return jsonify({})
