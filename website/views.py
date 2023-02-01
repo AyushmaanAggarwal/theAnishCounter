@@ -71,28 +71,27 @@ def movies():
     movies = Movie.query.order_by(Movie.likes.desc()).all()
     return render_template("movies.html", user=current_user, movies=movies)
 
-@views.route('/add-movie', methods=['POST', 'GET'])
+@views.route('/search-movie', methods=['POST', 'GET'])
+@login_required
+def search_movie():
+    output = False
+    if request.method == 'POST':
+        amount, output = search_movies_name(request.form.get('movieName'))
+    return render_template("search_movie.html", user=current_user, search_result=output, str=str)
+
+@views.route('/add-movie', methods=['POST'])
 @login_required
 def add_movie():
-    if request.method == 'POST':
-        movieName = request.form.get('movieName')
-        releaseYear = request.form.get('releaseYear')
-
-        movie = Movie.query.filter_by(movieName=movieName, releaseYear=releaseYear).first()
-        if movie:
-            flash("Movie has already been suggested.", category='error')
-        elif len(movieName) == 0:
-            flash("Please add a name.", category='error')
-        elif releaseYear == 0:
-            flash("Please add a year of release.", category='error')
-        else:
-            new_movie = Movie(movieName=movieName, releaseYear=releaseYear, description="", 
-                              runtime="", likes=0)
-            db.session.add(new_movie)
-            db.session.commit()
-            flash("Movie added!", category='success')
-            return redirect(url_for('views.movies'))
-    return render_template("add_movie.html", user=current_user)
+    movie_dict = json.loads(request.data)
+    movie_list = movie_dict['movie']
+    print(movie_list)
+    movie_data = get_movie_by_imdbid(movie_list[2])
+    print(movie_data)
+    new_movie = Movie(title=movie_list[0], year=movie_list[1], runtime=movie_data[2], posterUrl=movie_list[3],
+                    plot=movie_data[5], rating=str(movie_data[6]), imdb_id=movie_list[2], likes=0, creator_id=current_user.id)
+    db.session.add(new_movie)
+    db.session.commit()
+    return jsonify({})
 
 @views.route('/like-movie', methods=['POST'])
 def like_movie():

@@ -17,6 +17,7 @@
             <th class="col-2" scope="col">Poster</th>
             <th class="col-1" scope="col">Title</th>
             <th class="col-1" scope="col">Year</th>
+            <th class="col-1" scope="col">Runtime</th>
             <th class="col-1" scope="col">Rotten Tomtoes Rating</th>
             <th class="col-4" scope="col">Plot</th>
           </tr>
@@ -26,16 +27,17 @@
         {% if not movie.title[0]=='.' and not movie.title[0]=='_'%}
         <tr class="align-items-center">
             {% if user in movie.likedUsers %}
-            <td class="col-1"><button type="button" class="btn btn-outline-danger" onclick="likeBook('{{ book.id }}', false)">{{ book.likes }} &hearts;</button></td>
+            <td class="col-1"><button type="button" class="btn btn-outline-danger" onclick="likeMovie('{{ movie.id }}', false)">{{ movie.likes }} &hearts;</button></td>
             {% else %}
-            <td class="col-1"><button type="button" class="btn btn-outline-secondary" onclick="likeBook('{{ book.id }}', true)">{{ book.likes }} &hearts;</button></td>
+            <td class="col-1"><button type="button" class="btn btn-outline-secondary" onclick="likeMovie('{{ movie.id }}', true)">{{ movie.likes }} &hearts;</button></td>
             {% endif %}
 
             <td class="col-2"><img src="{{ movie.posterUrl }}" width="40" height="auto"/></td>
             <th class="col-1" scope="row">{{ movie.title }}</th>
-            <td class="col-1">{{ book.year }}</td>
-            <td class="col-1">{{ book.rating }}</td>
-            <td class="col-4">{{ book.plot }}</td>
+            <td class="col-1">{{ movie.year }}</td>
+            <td class="col-1">{{ movie.runtime }}</td>
+            <td class="col-1">{{ movie.rating }}</td>
+            <td class="col-4">{{ movie.plot }}</td>
         </tr>
         {% endif%}
         {% endfor %}
@@ -44,13 +46,13 @@
 </div>
   <br>
 <div class="fixed">
-<a href="/search-book">
-    <button class="btn btn-outline-secondary whitebg">Add A Book</button>
+<a href="/search-movie">
+    <button class="btn btn-outline-secondary whitebg">Add A Movie</button>
 </a>
 </div>
 
 {% if pastMovies %}
-<h1 align="center">Past Books</h1>
+<h1 align="center">Past Movies</h1>
 <div class="table-responsive">
 <table class="table lowz">
    <tbody>
@@ -58,16 +60,17 @@
         {% if movie.title[0]=='.' %}
         <tr class="align-items-center">
             {% if user in movie.likedUsers %}
-            <td class="col-1"><button type="button" class="btn btn-outline-danger" onclick="likeBook('{{ book.id }}', false)">{{ book.likes }} &hearts;</button></td>
+            <td class="col-1"><button type="button" class="btn btn-outline-danger" onclick="likeMovie('{{ movie.id }}', false)">{{ movie.likes }} &hearts;</button></td>
             {% else %}
-            <td class="col-1"><button type="button" class="btn btn-outline-secondary" onclick="likeBook('{{ book.id }}', true)">{{ book.likes }} &hearts;</button></td>
+            <td class="col-1"><button type="button" class="btn btn-outline-secondary" onclick="likeMovie('{{ movie.id }}', true)">{{ movie.likes }} &hearts;</button></td>
             {% endif %}
 
-            <td class="col-2"><img src="{{ movie.posterUrl }}" width="40" height="auto"/></td>
+            <td class="col-2"><img src="{{ movie.posterUrl }}" style="height:100%; width:auto;"/></td>
             <th class="col-1" scope="row">{{ movie.title }}</th>
-            <td class="col-1">{{ book.year }}</td>
-            <td class="col-1">{{ book.rating }}</td>
-            <td class="col-4">{{ book.plot }}</td>
+            <td class="col-1">{{ movie.year }}</td>
+            <td class="col-1">{{ movie.runtime }}</td>
+            <td class="col-1">{{ movie.rating }}</td>
+            <td class="col-4">{{ movie.plot }}</td>
         </tr>
         {% endif%}
         {% endfor %}

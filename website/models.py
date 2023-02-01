@@ -27,10 +27,13 @@ movies_likes = db.Table('movie_likes',
 
 class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    movieName = db.Column(db.String(150))
-    releaseYear = db.Column(db.Integer)
-    description = db.Column(db.String(1000))
+    title = db.Column(db.String(150))
+    imdb_id = db.Column(db.String(150))
+    year = db.Column(db.Integer)
+    rating = db.Column(db.String(150))
+    plot = db.Column(db.String(1000))
     runtime = db.Column(db.String(150))
+    posterUrl = db.Column(db.String(1000))
     likes = db.Column(db.Integer)
     likedUsers = db.relationship('User', secondary=movies_likes, backref='movies')
 
