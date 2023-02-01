@@ -31,4 +31,5 @@ def get_movie_by_imdbid(id):
     return [title, year, runtime, director, actors, plot, ratings, boxOffice, poster]
 
 if __name__ == '__main__':
-    print(search_movies_name(""))
+    print(search_movies_name("Dune"))
+    print(get_movie_by_imdbid("tt1160419"))
