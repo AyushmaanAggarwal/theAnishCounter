@@ -69,7 +69,9 @@ def delete_counter():
 @login_required
 def movies():
     movies = Movie.query.order_by(Movie.likes.desc()).all()
-    return render_template("movies.html", user=current_user, movies=movies)
+    pastMovies = any([movie.title[0]=='.' for movie in movies])
+
+    return render_template("movies.html", user=current_user, movies=movies, pastMovies=pastMovies)
 
 @views.route('/search-movie', methods=['POST', 'GET'])
 @login_required
@@ -77,6 +79,7 @@ def search_movie():
     output = False
     if request.method == 'POST':
         amount, output = search_movies_name(request.form.get('movieName'))
+
     return render_template("search_movie.html", user=current_user, search_result=output, str=str)
 
 @views.route('/add-movie', methods=['POST'])
