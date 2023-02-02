@@ -24,7 +24,7 @@ def get_movie_by_imdbid(id):
     director = req.json().get("Director", '')
     actors = req.json().get("Actors", '')
     plot = req.json().get("Plot", '')
-    ratings = [item["Value"] for item in req.json().get("Ratings", '') if item["Source"]==("Rotten Tomatoes")]
+    ratings = [item["Value"] for item in req.json().get("Ratings", '') if item["Source"]==("Rotten Tomatoes")][0]
     boxOffice = req.json().get("BoxOffice", '')
     poster = req.json().get("Poster", '')
 
