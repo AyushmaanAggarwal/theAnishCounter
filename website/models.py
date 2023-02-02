@@ -36,6 +36,7 @@ class Movie(db.Model):
     posterUrl = db.Column(db.String(1000))
     likes = db.Column(db.Integer)
     likedUsers = db.relationship('User', secondary=movies_likes, backref='movies')
+    creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class Lateness(db.Model):
     id = db.Column(db.Integer, primary_key=True)
