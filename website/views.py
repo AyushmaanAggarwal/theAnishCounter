@@ -1,8 +1,10 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask_login import login_required, current_user
-from .models import Counter, Movie, Book
+from .models import Counter, Movie, Book, CourseSection
+from web_scraping.ucb_web_scraper import get_course_information
 from booksandmovies.getBooks import *
 from booksandmovies.getMovies import *
+from forms import *
 from . import db
 import json
 
@@ -157,3 +159,48 @@ def like_book():
             book.likedUsers.remove(current_user)
         db.session.commit()
         return jsonify({})
+
+
+@views.route('/schedule', methods=['GET', 'POST'])
+def schedule():
+    schedule_list = current_user.get_schedule()
+    return render_template('schedule.html', schedule=schedule_list)
+
+
+@views.route('/new-schedule', methods=['GET', 'POST'])
+def new_schedule():
+    new_course_form = CourseForm()
+    if new_course_form.validate_on_submit():
+        name = new_course_form.name.data + " Lecture"
+        url_link = new_course_form.url_link.data
+        try:
+            unparsed_info = get_course_information(url_link)
+        except ValueError or TypeError or AttributeError:
+            flash("There was an error processing this request. Please try again.", category='error')
+            return redirect(url_for('new_schedule'))
+
+        week_days = unparsed_info['week_days']
+        start_time = unparsed_info['start']
+        end_time = unparsed_info['end']
+        location = unparsed_info['location']
+
+        new_course = CourseSection(name=name, url_link=url_link, week_days=week_days, start_time=start_time,
+                                   end_time=end_time, location=location)
+        current_user.sections.append(new_course)
+        db.session.commit()
+        return redirect(url_for('schedule'))
+
+    new_section_form = AddSection()
+    if new_section_form.is_submitted():
+        name = new_section_form.description.data
+        week_days = new_section_form.week_days.data
+        start_time = new_section_form.start_time.data
+        end_time = new_section_form.end_time.data
+        location = new_section_form.location.data
+        new_course = CourseSection(name=name, week_days=week_days, start_time=start_time,
+                                   end_time=end_time, location=location)
+        current_user.sections.append(new_course)
+        db.session.commit()
+        return redirect(url_for('schedule'))
+
+    return render_template('new_schedule.html', new_course_form=new_course_form, new_section_for=new_section_form)

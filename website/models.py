@@ -61,3 +61,14 @@ class Book(db.Model):
     likes = db.Column(db.Integer)
     likedUsers = db.relationship('User', secondary=book_likes, backref='books')
     creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class CourseSection(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    section_title = db.Column(db.String(150))
+    url_link = db.Column(db.String(250), default=None)
+    week_days = db.Column(db.String(50))
+    start_time = db.Column(db.Time())
+    end_time = db.Column(db.Time())
+    location = db.Column(db.String(150), default=None)
+

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Add Schedule{% endblock %}
+
+{% block content %}
+
+<form method="POST">
+  {{ new_course_form.hidden_tag() }}
+  {{ new_course_form.name() }}
+  {{ new_course_form.url_link() }}
+</form>
+
+{% endblock %}
