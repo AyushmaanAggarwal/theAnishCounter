@@ -1,10 +1,8 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask_login import login_required, current_user
 from .models import Counter, Movie, Book, CourseSection
-from web_scraping.ucb_web_scraper import get_course_information
 from booksandmovies.getBooks import *
 from booksandmovies.getMovies import *
-from forms import *
 from . import db
 import json
 
