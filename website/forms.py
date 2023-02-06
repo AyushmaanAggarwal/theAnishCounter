@@ -19,15 +19,22 @@ days_of_week = ['Mo', 'Tu', 'We', 'Th', 'Fr']
 
 
 class CourseForm(FlaskForm):
-    name = StringField("Name of Course", validators=[DataRequired()])
-    url_link = TextAreaField("Course Link", validators=[DataRequired()])
+    name = StringField("Name of Course", validators=[DataRequired()],
+                       render_kw={'class': 'form-control', 'placeholder': 'Course Name'})
+    url_link = TextAreaField("Course Link", validators=[DataRequired()],
+                             render_kw={'class': 'form-control', 'placeholder': 'Course Link'})
     submit = SubmitField('Submit')
 
 
 class AddSection(FlaskForm):
-    week_days = MultiCheckboxField("Week Days", validators=[DataRequired()], choices=days_of_week)
-    start_time = TimeField("Start Time", validators=[DataRequired()])
-    end_time = TimeField("End Time", validators=[DataRequired()])
-    location = StringField("Location", validators=[DataRequired()])
-    description = StringField("Description", validators=[DataRequired()])
+    week_days = MultiCheckboxField("Week Days", choices=days_of_week,
+                                   render_kw={'class': 'form-control'})
+    start_time = TimeField("Start Time", validators=[DataRequired()],
+                           render_kw={'class': 'form-control'})
+    end_time = TimeField("End Time", validators=[DataRequired()],
+                         render_kw={'class': 'form-control'})
+    location = StringField("Location",
+                           render_kw={'class': 'form-control', 'placeholder': 'Location (Optional)'})
+    description = StringField("Description", validators=[DataRequired()],
+                              render_kw={'class': 'form-control', 'placeholder': 'Section Type'})
     submit = SubmitField('Submit')
