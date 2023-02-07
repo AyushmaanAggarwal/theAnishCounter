@@ -44,13 +44,15 @@ def create_app():
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(late, url_prefix='/')
 
-    from .models import User, Counter, Movie, Book, Lateness
+    from .models import User, Counter, Movie, Book, Lateness, Event, Announcement
 
     admin.add_view(MyView(User, db.session))
     admin.add_view(MyView(Counter, db.session))
     admin.add_view(MyView(Movie, db.session))
     admin.add_view(MyView(Book, db.session))
     admin.add_view(MyView(Lateness, db.session))
+    admin.add_view(MyView(Event, db.session))
+    admin.add_view(MyView(Announcement, db.session))
     # migrate = Migrate(app, db, render_as_batch=True)
     create_database(app)
 
@@ -63,7 +65,9 @@ def create_app():
         return User.query.get(int(id))
 
     from .lateness import reset_day_lateness
+    from .views import delete_old_events
     scheduler.add_job(func=lambda: reset_day_lateness(app), trigger='cron', month='1-5', day_of_week='mon, wed, fri', hour=9, minute=0, second=0)
+    scheduler.add_job(func=lambda: delete_old_events(app), trigger='cron', month='1-5', day_of_week='mon, tue, wed, thu, fri, sat, sun', hour=0, minute=1, second=0)
     scheduler.start()
 
     return app
