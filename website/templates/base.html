@@ -86,7 +86,7 @@
     
     <script
     type="text/javascript"
-    src="{{ url_for('static', filename='index.js') }}"
+    src="static/index.js?hash_file('md5', 'static/index.js')?>"
     ></script>
   </body>
 </html>
