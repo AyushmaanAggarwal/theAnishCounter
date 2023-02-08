@@ -42,9 +42,12 @@ def lateness_home():
 
     pst_tz = datetime.timezone(offset=-datetime.timedelta(hours=8))
     curr_time = datetime.datetime.now(pst_tz)
-
+    final_time = datetime.datetime(2023, 2, 17, 8, tzinfo=pst_tz)
+    days_remaining = (final_time - curr_time).days
+    seconds_remaining = (final_time - curr_time).seconds
     return render_template('lateness_tracker.html', user=current_user, tracking=tracking, 
-                            ordered_tracking=ordered_tracking, curr_time=curr_time, dates=dates)
+                            ordered_tracking=ordered_tracking, curr_time=curr_time,
+                            days_remaining=days_remaining, seconds_remaining=seconds_remaining, dates=dates)
 
 @late.route('/mark-here', methods=['POST'])
 @login_required

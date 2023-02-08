@@ -2,6 +2,12 @@
 {% block title %}Lateness Tracker{% endblock %}
 
 {% block content %}
+<br><br>
+<div class="card p-4 p-md-5 mb-4 rounded text-bg-dark">
+  <h1>The Club</h1>
+  <p class="lead my-3">There are {{days_remaining}} days and {{seconds_remaining}} seconds remaining until the top two people will have to .... At that point, everyone's score will be halved, except for the top two people whose scores will be reset to 0.</p>
+</div>
+<br>
 <div class="row justify-content-center">
     <div class="col-auto">
         <h1 id="time" class="m-4"> </h1>
