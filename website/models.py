@@ -61,3 +61,19 @@ class Book(db.Model):
     likes = db.Column(db.Integer)
     likedUsers = db.relationship('User', secondary=book_likes, backref='books')
     creator_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class Announcement(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(500))
+    delete_date = db.Column(db.Date)
+    user_author = db.Column(db.String(100))
+
+
+class Event(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100))
+    location = db.Column(db.String(100))
+    date = db.Column(db.Date())
+    time = db.Column(db.Time())
+    description = db.Column(db.String(500))

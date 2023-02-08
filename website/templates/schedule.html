@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Schedule{% endblock %}
+
+{% block content %}
+
+<table>
+    <thead>
+        <tr>
+            <th> Monday </th>
+            <th> Tuesday </th>
+            <th> Wednesday </th>
+            <th> Thursday </th>
+            <th> Friday </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for day_list in schedule %}
+
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="/new-schedule">
+    <button>Make New Schedule or Add Section</button>
+</a>
+
+{% endblock %}
