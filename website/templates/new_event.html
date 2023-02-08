@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}New Event{% endblock %}
+
+{% block content %}
+<form method="POST">
+    <h1 align="center">Make New Event</h1>
+    <div class="form-group">
+        <label for="eventTitle">Event Title</label>
+        <input
+          type="eventTitle"
+          class="form-control"
+          id="eventTitle"
+          name="eventTitle"
+          placeholder="Enter event title"
+        />
+      </div>
+    <div class="form-group">
+        <label for="eventDate">Date</label>
+        <input
+                type="date"
+                class="form-control"
+                id="eventDate"
+                name="eventDate"
+                placeholder="Enter date"
+        />
+    </div>
+    <div class="form-group">
+        <label for="eventTime">Time</label>
+        <input
+                type="time"
+                class="form-control"
+                id="eventTime"
+                name="eventTime"
+                placeholder="Enter time"
+        />
+    </div>
+    <div class="form-group">
+        <label for="eventLocation">Event Location</label>
+        <input
+                type="eventLocation"
+                class="form-control"
+                id="eventLocation"
+                name="eventLocation"
+                placeholder="Enter event title"
+        />
+    </div>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <input
+          type="description"
+          class="form-control"
+          id="description"
+          name="description"
+          placeholder="Enter description"
+        />
+      </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>
+{% endblock %}

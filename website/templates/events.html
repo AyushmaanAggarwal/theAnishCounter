@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Events{% endblock %}
+
+{% block content %}
+<br><br>
+<div class="card p-4 p-md-5 mb-4 rounded text-bg-dark">
+  <h1>Welcome to the Events Page</h1>
+  <p class="lead my-3">Here, you can post any events that you think might interest others. You could
+   also plan get togethers and study sessions!</p>
+</div>
+<br>
+
+{% if today_events %}
+<h1 align="center">Today's Events</h1>
+<div class="table-responsive">
+    <table class="table lowz">
+        <thead class="thead-dark">
+        <tr>
+            <th class="col-2" scope="col">Title</th>
+            <th class="col-1" scope="col">Date</th>
+            <th class="col-1" scope="col">Time</th>
+            <th class="col-2" scope="col">Location</th>
+            <th class="col-3" scope="col">Description</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for event in today_events %}
+        <tr class="align-items-center">
+            <th class="col-2">{{ event.title }}</th>
+            <td class="col-1">{{ event.date }}</td>
+            <td class="col-1">{{ event.time }}</td>
+            <td class="col-2">{{ event.location }}</td>
+            <td class="col-3" scope="row">{{ event.description }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<h1 align="center">Upcoming Events</h1>
+<div class="table-responsive">
+<table class="table lowz">
+    {% if not today_events %}
+    <thead class="thead-dark">
+      <tr>
+        <th class="col-2" scope="col">Title</th>
+        <th class="col-1" scope="col">Date</th>
+        <th class="col-1" scope="col">Time</th>
+        <th class="col-2" scope="col">Location</th>
+        <th class="col-3" scope="col">Description</th>
+      </tr>
+    </thead>
+    {% endif %}
+    <tbody>
+        {% for event in events %}
+        <tr class="align-items-center">
+            <th class="col-2">{{ event.title }}</th>
+            <td class="col-1">{{ event.date }}</td>
+            <td class="col-1">{{ event.time }}</td>
+            <td class="col-2">{{ event.location }}</td>
+            <td class="col-3" scope="row">{{ event.description }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
+<br>
+<div class="fixed">
+    <a href="/add-event">
+        <button class="btn btn-outline-secondary whitebg">Add Event</button>
+    </a>
+</div>
+{% endblock %}

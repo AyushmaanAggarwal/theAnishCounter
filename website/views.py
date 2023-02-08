@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from flask_login import login_required, current_user
-from .models import Counter, Movie, Book
+from datetime import date, datetime, time, timedelta, timezone
+from .models import Counter, Movie, Book, Event, Announcement
 from booksandmovies.getBooks import *
 from booksandmovies.getMovies import *
 from . import db
@@ -157,3 +158,45 @@ def like_book():
             book.likedUsers.remove(current_user)
         db.session.commit()
         return jsonify({})
+
+
+def delete_old_events(app):
+    with app.app_context():
+        pst_tz = timezone(offset=-timedelta(hours=8))
+        curr_time = datetime.now(pst_tz)
+        for event in Event.query.all():
+            if event.date < curr_time.date():
+                db.session.delete(event)
+                db.session.commit()
+
+
+def sort_by_datetime(object_to_compare):
+    date_ = object_to_compare.date
+    time_ = object_to_compare.time
+    return datetime(date_.year, date_.month, date_.day, hour=time_.hour, minute=time_.minute)
+
+
+@views.route('/events', methods=['GET', 'POST'])
+def events():
+    events_ = sorted(Event.query.all(), key=sort_by_datetime)
+    today_events = sorted(Event.query.filter_by(date=date.today()).all(), key=sort_by_datetime)
+    # Both lists have the same first items, so we can just pop a certain number of times to avoid repeats
+    for i in range(len(today_events)):
+        events_.pop(0)
+    return render_template("events.html", user=current_user, today_events=today_events, events=events_)
+
+
+@views.route('/add-event', methods=['GET', 'POST'])
+def add_event():
+    if request.method == 'POST':
+        title = request.form.get('eventTitle')
+        date_ = date.fromisoformat(request.form.get('eventDate'))
+        as_datetime = datetime.strptime(request.form.get('eventTime'), "%H:%M")
+        time_ = time(hour=as_datetime.hour, minute=as_datetime.minute)
+        location = request.form.get('eventLocation')
+        description = request.form.get('description')
+        new_event = Event(title=title, date=date_, time=time_, location=location, description=description)
+        db.session.add(new_event)
+        db.session.commit()
+        return redirect(url_for('views.events'))
+    return render_template("new_event.html", user=current_user)
