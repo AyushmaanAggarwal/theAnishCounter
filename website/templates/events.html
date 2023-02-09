@@ -28,7 +28,7 @@
         <tr class="align-items-center">
             <th class="col-2">{{ event.title }}</th>
             <td class="col-1">{{ event.date }}</td>
-            <td class="col-1">{{ event.time }}</td>
+            <td class="col-1">{{ event.time.__format__('%I:%M:%S %p') }}</td>
             <td class="col-2">{{ event.location }}</td>
             <td class="col-3" scope="row">{{ event.description }}</td>
         </tr>
