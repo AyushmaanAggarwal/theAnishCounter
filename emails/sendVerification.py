@@ -1,4 +1,4 @@
-from emails.sendEmail import gmail_send_message
+from emails.sendEmail2 import gmail_send_message
 
 def send_verification_email(to_address, name, code):
     subject = f"Hello There, {name}"

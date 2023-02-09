@@ -183,7 +183,7 @@ def events():
     # Both lists have the same first items, so we can just pop a certain number of times to avoid repeats
     for i in range(len(today_events)):
         events_.pop(0)
-    return render_template("events.html", user=current_user, today_events=today_events, events=events_)
+    return render_template("events.html", user=current_user, today_events=today_events, events=events_, fmttime=datetime.strptime)
 
 
 @views.route('/add-event', methods=['GET', 'POST'])

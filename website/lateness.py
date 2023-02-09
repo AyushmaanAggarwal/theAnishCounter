@@ -59,11 +59,12 @@ def mark_here():
 
     if tracker:
         pst_tz = datetime.timezone(offset=-datetime.timedelta(hours=8))
-        if here:
-            tracker.lateTotal = tracker.lateTotal + min(max(datetime.datetime.now(pst_tz).minute - 10, 0), 20)
-            tracker.lastTime = datetime.datetime.now(pst_tz)
-        elif not here:
-            tracker.lateTotal = tracker.lateTotal - min(max(tracker.lastTime.minute - 10, 0), 20)
-            tracker.lastTime = None
-        db.session.commit()
-        return jsonify({})
+        if not tracker.lastTime.date() == datetime.datetime.now(pst_tz).date():
+            if here:
+                tracker.lateTotal = tracker.lateTotal + min(max(datetime.datetime.now(pst_tz).minute - 10, 0), 20)
+                tracker.lastTime = datetime.datetime.now(pst_tz)
+            elif not here:
+                tracker.lateTotal = tracker.lateTotal - min(max(tracker.lastTime.minute - 10, 0), 20)
+                tracker.lastTime = None
+            db.session.commit()
+            return jsonify({})
