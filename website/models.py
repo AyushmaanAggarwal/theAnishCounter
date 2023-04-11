@@ -65,8 +65,10 @@ class Book(db.Model):
 
 class Announcement(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    type = db.Column(db.String())
     description = db.Column(db.String(500))
     delete_date = db.Column(db.Date)
+    post_date = db.Column(db.Date)
     user_author = db.Column(db.String(100))
 
 
