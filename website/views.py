@@ -119,7 +119,9 @@ def books():
     books = Book.query.order_by(Book.likes.desc()).all()
     pastBooks = any([book.bookTitle[0]=='.' for book in books])
     currentBooks = any([book.bookTitle[0]=='_' for book in books])
-    return render_template("books.html", user=current_user, books=books, get_book_cover=get_book_cover, load=json.loads, pastBooks=pastBooks, currentBooks=currentBooks)
+    bookClubAnnouncement = Announcement.query.filter_by(type="book club").order_by(Announcement.post_date.desc()).first().description
+    dateAnnouncement = Announcement.query.filter_by(type="book club").order_by(Announcement.post_date.desc()).first().post_date.strftime("%b %d, %Y")
+    return render_template("books.html", user=current_user, books=books, get_book_cover=get_book_cover, load=json.loads, pastBooks=pastBooks, currentBooks=currentBooks, announcement=bookClubAnnouncement, date=dateAnnouncement)
 
 @views.route('/search-book', methods=['POST', 'GET'])
 @login_required
