@@ -9,16 +9,19 @@ import json
 
 views = Blueprint('views', __name__)
 
+
 @views.route('/')
 @login_required
 def home():
     return render_template("home.html", user=current_user)
+
 
 @views.route('/counter')
 @login_required
 def counter():
     counters = Counter.query.order_by(Counter.counts.desc()).all()
     return render_template("counter.html", user=current_user, counters=counters)
+
 
 @views.route('/new-counter', methods=['POST', 'GET'])
 @login_required
@@ -42,6 +45,7 @@ def new_counter():
             return redirect(url_for('views.counter'))
     return render_template("new_counter.html", user=current_user)
 
+
 @views.route('/increase-counter', methods=['POST'])
 def increase_counter():
     counter = json.loads(request.data)
@@ -56,6 +60,7 @@ def increase_counter():
         db.session.commit()
         return jsonify({})
 
+
 @views.route('/delete-counter', methods=['POST'])
 def delete_counter():
     counter = json.loads(request.data)
@@ -66,13 +71,15 @@ def delete_counter():
         db.session.commit()
         return jsonify({})
 
+
 @views.route('/movies')
 @login_required
 def movies():
     movies = Movie.query.order_by(Movie.likes.desc()).all()
-    pastMovies = any([movie.title[0]=='.' for movie in movies])
+    pastMovies = any([movie.title[0] == '.' for movie in movies])
 
     return render_template("movies.html", user=current_user, movies=movies, pastMovies=pastMovies)
+
 
 @views.route('/search-movie', methods=['POST', 'GET'])
 @login_required
@@ -83,6 +90,7 @@ def search_movie():
 
     return render_template("search_movie.html", user=current_user, search_result=output, str=str)
 
+
 @views.route('/add-movie', methods=['POST'])
 @login_required
 def add_movie():
@@ -91,10 +99,13 @@ def add_movie():
     print(movie_list)
     movie_data = get_movie_by_imdbid(movie_list[2])
     print(movie_data)
-    new_movie = Movie(title=movie_list[0], year=movie_list[1], runtime=movie_data[2], posterUrl=movie_list[3], plot=movie_data[5], rating=str(movie_data[6]), imdb_id=movie_list[2], likes=0, creator_id=current_user.id)
+    new_movie = Movie(title=movie_list[0], year=movie_list[1], runtime=movie_data[2], posterUrl=movie_list[3],
+                      plot=movie_data[5], rating=str(movie_data[6]), imdb_id=movie_list[2], likes=0,
+                      creator_id=current_user.id)
     db.session.add(new_movie)
     db.session.commit()
     return jsonify({})
+
 
 @views.route('/like-movie', methods=['POST'])
 def like_movie():
@@ -108,7 +119,7 @@ def like_movie():
             movie.likedUsers.append(current_user)
         else:
             movie.likes = movie.likes - 1
-            movie.likedUsers.remove(current_user)  
+            movie.likedUsers.remove(current_user)
         db.session.commit()
         return jsonify({})
 
@@ -117,11 +128,16 @@ def like_movie():
 @login_required
 def books():
     books = Book.query.order_by(Book.likes.desc()).all()
-    pastBooks = any([book.bookTitle[0]=='.' for book in books])
-    currentBooks = any([book.bookTitle[0]=='_' for book in books])
-    bookClubAnnouncement = Announcement.query.filter_by(type="book club").order_by(Announcement.post_date.desc()).first().description
-    dateAnnouncement = Announcement.query.filter_by(type="book club").order_by(Announcement.post_date.desc()).first().post_date.strftime("%b %d, %Y")
-    return render_template("books.html", user=current_user, books=books, get_book_cover=get_book_cover, load=json.loads, pastBooks=pastBooks, currentBooks=currentBooks, announcement=bookClubAnnouncement, date=dateAnnouncement)
+    pastBooks = any([book.bookTitle[0] == '.' for book in books])
+    currentBooks = any([book.bookTitle[0] == '_' for book in books])
+    bookClubAnnouncement = Announcement.query.filter_by(type="book club").order_by(
+        Announcement.post_date.desc()).first().description
+    dateAnnouncement = Announcement.query.filter_by(type="book club").order_by(
+        Announcement.post_date.desc()).first().post_date.strftime("%b %d, %Y")
+    return render_template("books.html", user=current_user, books=books, get_book_cover=get_book_cover, load=json.loads,
+                           pastBooks=pastBooks, currentBooks=currentBooks, announcement=bookClubAnnouncement,
+                           date=dateAnnouncement)
+
 
 @views.route('/search-book', methods=['POST', 'GET'])
 @login_required
@@ -185,7 +201,8 @@ def events():
     # Both lists have the same first items, so we can just pop a certain number of times to avoid repeats
     for i in range(len(today_events)):
         events_.pop(0)
-    return render_template("events.html", user=current_user, today_events=today_events, events=events_, fmttime=datetime.strptime)
+    return render_template("events.html", user=current_user, today_events=today_events, events=events_,
+                           fmttime=datetime.strptime)
 
 
 @views.route('/add-event', methods=['GET', 'POST'])

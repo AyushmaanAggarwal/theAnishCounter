@@ -1,5 +1,6 @@
 import requests
 
+
 def search_movies_name(name, count=15):
     movie_name = name.replace(" ", "+")
     with open("instance/movie_api", 'r') as file:
@@ -14,6 +15,7 @@ def search_movies_name(name, count=15):
     output = list(map(list, zip(titles, year, imdbID, Poster)))
     return numFound, output
 
+
 def get_movie_by_imdbid(id):
     with open("instance/movie_api", 'r') as file:
         api_key = file.read()
@@ -25,7 +27,7 @@ def get_movie_by_imdbid(id):
     actors = req.json().get("Actors", '')
     plot = req.json().get("Plot", '')
     try:
-        ratings = [item["Value"] for item in req.json().get("Ratings", '') if item["Source"]==("Rotten Tomatoes")][0]
+        ratings = [item["Value"] for item in req.json().get("Ratings", '') if item["Source"] == ("Rotten Tomatoes")][0]
     except:
         ratings = "-"
     if ratings is None:
@@ -34,6 +36,7 @@ def get_movie_by_imdbid(id):
     poster = req.json().get("Poster", '')
 
     return [title, year, runtime, director, actors, plot, ratings, boxOffice, poster]
+
 
 if __name__ == '__main__':
     print(search_movies_name("Dune"))

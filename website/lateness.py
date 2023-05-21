@@ -8,19 +8,20 @@ import datetime
 late = Blueprint('late', __name__)
 
 dates = [datetime.date(2023, 1, 18), datetime.date(2023, 1, 20), datetime.date(2023, 1, 23),
-            datetime.date(2023, 1, 25), datetime.date(2023, 1, 27), datetime.date(2023, 1, 30),
-            datetime.date(2023, 2, 1), datetime.date(2023, 2, 3), datetime.date(2023, 2, 6),
-            datetime.date(2023, 2, 8), datetime.date(2023, 2, 10), datetime.date(2023, 2, 13),
-            datetime.date(2023, 2, 15), datetime.date(2023, 2, 17), datetime.date(2023, 2, 22),
-            datetime.date(2023, 2, 24), datetime.date(2023, 2, 27), datetime.date(2023, 3, 1),
-            datetime.date(2023, 3, 3), datetime.date(2023, 3, 6), datetime.date(2023, 3, 8),
-            datetime.date(2023, 3, 10), datetime.date(2023, 3, 13), datetime.date(2023, 3, 15),
-            datetime.date(2023, 3, 17), datetime.date(2023, 3, 20), datetime.date(2023, 3, 22),
-            datetime.date(2023, 3, 24), datetime.date(2023, 4, 3), datetime.date(2023, 4, 5),
-            datetime.date(2023, 4, 7), datetime.date(2023, 4, 10), datetime.date(2023, 4, 12),
-            datetime.date(2023, 4, 14), datetime.date(2023, 4, 17), datetime.date(2023, 4, 19),
-            datetime.date(2023, 4, 21), datetime.date(2023, 4, 24), datetime.date(2023, 4, 26),
-            datetime.date(2023, 4, 28)]
+         datetime.date(2023, 1, 25), datetime.date(2023, 1, 27), datetime.date(2023, 1, 30),
+         datetime.date(2023, 2, 1), datetime.date(2023, 2, 3), datetime.date(2023, 2, 6),
+         datetime.date(2023, 2, 8), datetime.date(2023, 2, 10), datetime.date(2023, 2, 13),
+         datetime.date(2023, 2, 15), datetime.date(2023, 2, 17), datetime.date(2023, 2, 22),
+         datetime.date(2023, 2, 24), datetime.date(2023, 2, 27), datetime.date(2023, 3, 1),
+         datetime.date(2023, 3, 3), datetime.date(2023, 3, 6), datetime.date(2023, 3, 8),
+         datetime.date(2023, 3, 10), datetime.date(2023, 3, 13), datetime.date(2023, 3, 15),
+         datetime.date(2023, 3, 17), datetime.date(2023, 3, 20), datetime.date(2023, 3, 22),
+         datetime.date(2023, 3, 24), datetime.date(2023, 4, 3), datetime.date(2023, 4, 5),
+         datetime.date(2023, 4, 7), datetime.date(2023, 4, 10), datetime.date(2023, 4, 12),
+         datetime.date(2023, 4, 14), datetime.date(2023, 4, 17), datetime.date(2023, 4, 19),
+         datetime.date(2023, 4, 21), datetime.date(2023, 4, 24), datetime.date(2023, 4, 26),
+         datetime.date(2023, 4, 28)]
+
 
 def reset_day_lateness(app):
     with app.app_context():
@@ -34,6 +35,7 @@ def reset_day_lateness(app):
 
                 db.session.commit()
 
+
 @late.route('/lateness-tracker', methods=['GET', 'POST'])
 @login_required
 def lateness_home():
@@ -45,9 +47,10 @@ def lateness_home():
     final_time = datetime.datetime(2023, 2, 17, 8, tzinfo=pst_tz)
     days_remaining = (final_time - curr_time).days
     seconds_remaining = (final_time - curr_time).seconds
-    return render_template('lateness_tracker.html', user=current_user, tracking=tracking, 
-                            ordered_tracking=ordered_tracking, curr_time=curr_time,
-                            days_remaining=days_remaining, seconds_remaining=seconds_remaining, dates=dates)
+    return render_template('lateness_tracker.html', user=current_user, tracking=tracking,
+                           ordered_tracking=ordered_tracking, curr_time=curr_time,
+                           days_remaining=days_remaining, seconds_remaining=seconds_remaining, dates=dates)
+
 
 @late.route('/mark-here', methods=['POST'])
 @login_required

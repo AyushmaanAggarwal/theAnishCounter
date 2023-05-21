@@ -4,7 +4,7 @@ from os import path
 from flask_login import LoginManager, current_user, AnonymousUserMixin
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-# from flask_migrate import Migrate
+from flask_migrate import Migrate
 from apscheduler.schedulers.background import BackgroundScheduler
 from sqlalchemy import MetaData
 
@@ -22,9 +22,12 @@ DB_NAME = "database.db"
 
 scheduler = BackgroundScheduler(timezone="America/Los_Angeles", daemon=True)
 
+
 class MyView(ModelView):
     def is_accessible(self):
-        return not isinstance(current_user._get_current_object(), AnonymousUserMixin) and current_user.testlevel == 'admin'
+        return not isinstance(current_user._get_current_object(),
+                              AnonymousUserMixin) and current_user.testlevel == 'admin'
+
 
 def create_app():
     app = Flask(__name__)
@@ -53,7 +56,7 @@ def create_app():
     admin.add_view(MyView(Lateness, db.session))
     admin.add_view(MyView(Event, db.session))
     admin.add_view(MyView(Announcement, db.session))
-    # migrate = Migrate(app, db, render_as_batch=True)
+    migrate = Migrate(app, db, render_as_batch=True)
     create_database(app)
 
     login_manager = LoginManager()
@@ -66,11 +69,14 @@ def create_app():
 
     from .lateness import reset_day_lateness
     from .views import delete_old_events
-    scheduler.add_job(func=lambda: reset_day_lateness(app), trigger='cron', month='1-5', day_of_week='mon, wed, fri', hour=9, minute=0, second=0)
-    scheduler.add_job(func=lambda: delete_old_events(app), trigger='cron', month='1-5', day_of_week='mon, tue, wed, thu, fri, sat, sun', hour=0, minute=1, second=0)
+    scheduler.add_job(func=lambda: reset_day_lateness(app), trigger='cron', month='1-5', day_of_week='mon, wed, fri',
+                      hour=9, minute=0, second=0)
+    scheduler.add_job(func=lambda: delete_old_events(app), trigger='cron', month='1-5',
+                      day_of_week='mon, tue, wed, thu, fri, sat, sun', hour=0, minute=1, second=0)
     scheduler.start()
 
     return app
+
 
 def create_database(app):
     if not path.exists('website/' + DB_NAME):

@@ -2,6 +2,11 @@
 {% block title %}Anish Counter{% endblock %}
 
 {% block content %}
-<br><br>
-<h1>Hello There, {{user.username}}</h1>
+    <br><br>
+    <h1>Hello There, {{ user.username }}</h1>
+    <div class="fixed">
+        <a href="/add-picture">
+            <button class="btn btn-outline-secondary whitebg">Add A Picture</button>
+        </a>
+    </div>
 {% endblock %}

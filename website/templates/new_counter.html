@@ -2,29 +2,29 @@
 {% block title %}New Counter{% endblock %}
 
 {% block content %}
-<form method="POST">
-    <h1 align="center">Make New Counter</h1>
-    <div class="form-group">
-        <label for="counterName">Counter Name</label>
-        <input
-          type="counterName"
-          class="form-control"
-          id="counterName"
-          name="counterName"
-          placeholder="Enter counter name"
-        />
-      </div>
-    <div class="form-group">
-        <label for="description">Description</label>
-        <input
-          type="description"
-          class="form-control"
-          id="description"
-          name="description"
-          placeholder="Enter description"
-        />
-      </div>
-    <br />
-    <button type="submit" class="btn btn-primary">Add</button>
-</form>
+    <form method="POST">
+        <h1 align="center">Make New Counter</h1>
+        <div class="form-group">
+            <label for="counterName">Counter Name</label>
+            <input
+                type="counterName"
+                class="form-control"
+                id="counterName"
+                name="counterName"
+                placeholder="Enter counter name"
+            />
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input
+                type="description"
+                class="form-control"
+                id="description"
+                name="description"
+                placeholder="Enter description"
+            />
+        </div>
+        <br/>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
 {% endblock %}

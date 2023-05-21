@@ -6,7 +6,8 @@
 table.lowz {
     z-index: 500;
 }
- div.fixed {
+
+div.fixed {
     position: fixed;
     bottom: 20px;
     right: 20px;

@@ -1,17 +1,20 @@
 import smtplib
 import ssl
-from email.message import EmailMessage
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 
 def gmail_send_message(to_address, from_address, subject, message_text):
-
     with open("../instance/pythonpass", 'r') as file:
         email_password = file.read()
 
-    em = EmailMessage()
+    em = MIMEMultipart('alternative')
     em['From'] = from_address
     em['To'] = to_address
     em['Subject'] = subject
-    em.set_content(message_text)
+    part2 = MIMEText(message_text, 'html')
+    em.attach(part2)
+
     context = ssl.create_default_context()
 
     try:
@@ -21,6 +24,3 @@ def gmail_send_message(to_address, from_address, subject, message_text):
         return "Email Sent!"
     except:
         return "Email failed to send"
-
-
-
